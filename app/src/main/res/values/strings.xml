@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Turtle</string>
+    <string name="name_overview">Overview</string>
+    <string name="name_record">Record</string>
+    <string name="name_lesson">Lesson</string>
+    <string name="name_setting">Setting</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="@string/name_overview"
+        android:icon="@drawable/ic_icon_overview"
+        android:id="@+id/bottombar_overview"
+        android:enabled="true" />
+    <item
+        android:title="@string/name_record"
+        android:icon="@drawable/ic_icon_recoder"
+        android:id="@+id/bottombar_record"
+        android:enabled="true" />
+    <item
+        android:title="@string/name_lesson"
+        android:icon="@drawable/ic_icon_lesson"
+        android:id="@+id/bottombar_lesson"
+        android:enabled="true" />
+    <item
+        android:title="@string/name_setting"
+        android:icon="@drawable/ic_icon_setting"
+        android:id="@+id/bottombar_setting"
+        android:enabled="true" />
+
+</menu>
