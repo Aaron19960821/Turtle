@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:theme="@style/TurtleTheme"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:background="@color/colorPass"
+        android:id="@+id/overview_timedisplaybackground"
+        android:alpha="0.3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/overview_timedisplay"
+        android:textSize="35sp"
+        android:layout_centerInParent="true"
+        android:text="1h10min"
+        android:textColor="@color/textWhite" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/string_overview_timeexplain"
+        android:textColor="@color/textWhite"
+        android:layout_below="@id/overview_timedisplay"
+        android:layout_centerHorizontal="true"
+        android:textSize="17sp"/>
+
+</RelativeLayout>
