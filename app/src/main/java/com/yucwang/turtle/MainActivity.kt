@@ -8,8 +8,9 @@ import android.support.v7.app.ActionBar
 
 class MainActivity : AppCompatActivity(){
 
-    lateinit var mBottomNavigationView: BottomNavigationView
-    lateinit var mToolbar: ActionBar
+    private lateinit var mBottomNavigationView: BottomNavigationView
+    private lateinit var mToolbar: ActionBar
+    private lateinit var mFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,6 +18,13 @@ class MainActivity : AppCompatActivity(){
 
         mToolbar = supportActionBar!!
         initBottomNavigationView()
+        initFragment()
+    }
+
+    // By default will open Overview Fragment
+    private fun initFragment() {
+        mFragment = OverviewFragment.newInstance()
+        openFragment()
     }
 
     // init the bottom navigation view
@@ -27,25 +35,29 @@ class MainActivity : AppCompatActivity(){
                 R.id.bottombar_overview -> {
                     mToolbar.title = "Overview"
                     val overviewFragment = OverviewFragment.newInstance()
-                    openFragment(overviewFragment)
+                    mFragment = overviewFragment
+                    openFragment()
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.bottombar_record -> {
                     mToolbar.title = "Record"
                     val recordFragment = RecordFragment.newInstance()
-                    openFragment(recordFragment)
+                    mFragment = recordFragment
+                    openFragment()
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.bottombar_lesson -> {
                     mToolbar.title = "Lesson"
                     val lessonFragment = LessonFragment.newInstance()
-                    openFragment(lessonFragment)
+                    mFragment = lessonFragment
+                    openFragment()
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.bottombar_setting -> {
                     mToolbar.title = "Setting"
                     val settingFragment = SettingFragment.newInstance()
-                    openFragment(settingFragment)
+                    mFragment = settingFragment
+                    openFragment()
                     return@setOnNavigationItemSelectedListener true
                 }
                 else -> return@setOnNavigationItemSelectedListener false
@@ -53,9 +65,9 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
-    private fun openFragment(fragment: Fragment) {
+    private fun openFragment() {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.content_view, fragment)
+        transaction.replace(R.id.content_view, mFragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
