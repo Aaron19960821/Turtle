@@ -5,7 +5,6 @@
     android:layout_height="wrap_content">
 
     <View
-        android:theme="@style/TurtleTheme"
         android:layout_width="match_parent"
         android:layout_height="240dp"
         android:background="@color/colorPass"
@@ -16,18 +15,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/overview_timedisplay"
-        android:textSize="35sp"
-        android:layout_centerInParent="true"
+        android:textSize="40sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
         android:text="1h10min"
-        android:textColor="@color/textWhite" />
+        android:textColor="@color/textWhite"
+        android:paddingBottom="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/string_overview_timeexplain"
         android:textColor="@color/textWhite"
-        android:layout_below="@id/overview_timedisplay"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/overview_timedisplay"
         android:textSize="17sp"/>
-
 </RelativeLayout>
