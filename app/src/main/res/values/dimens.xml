@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Dimens for overview-->
+    <dimen name="overview_timedisplay_height">280dp</dimen>
+    <dimen name="overview_timedisplay_timepaddingtop">90dp</dimen>
+    <dimen name="overview_timedisplay_timetextsize">40sp</dimen>
+    <dimen name="overview_timedisplay_padding">8dp</dimen>
+    <dimen name="overview_historyitem_height">30dp</dimen>
+    <dimen name="overview_historyitem_padding">4dp</dimen>
+    <dimen name="overview_historyitem_textsize">20sp</dimen>
+</resources>

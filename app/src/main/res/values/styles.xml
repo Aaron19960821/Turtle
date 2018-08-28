@@ -8,8 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!--Theme for the main activity-->
     <style name="TurtleTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPass</item>
+        <item name="colorPrimaryDark">@color/colorPass</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
 </resources>
