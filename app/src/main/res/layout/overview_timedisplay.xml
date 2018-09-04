@@ -8,12 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/overview_timedisplay_height"
         android:background="@color/colorPass"
-        android:id="@+id/overview_timedisplaybackground" />
+        android:id="@+id/timedisplaybackground" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/overview_timedisplay"
+        android:id="@+id/timedisplay"
         android:textSize="@dimen/overview_timedisplay_timetextsize"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/overview_timedisplay_timepaddingtop"
@@ -27,6 +27,6 @@
         android:text="@string/string_overview_timeexplain"
         android:textColor="@color/textWhite"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/overview_timedisplay"
+        android:layout_below="@id/timedisplay"
         android:textSize="17sp"/>
 </RelativeLayout>

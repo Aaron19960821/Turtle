@@ -35,7 +35,7 @@ class OverviewHistoryListItem(val mDate: Date, val mTimeUsage: Time) {
 
         // get the suffix of a date
         private fun getDateSuffix(date: Date): String {
-            when (date.day % 10) {
+            when (date.date % 10) {
                 1 -> return "st"
                 2 -> return "nd"
                 3 -> return "rd"
@@ -44,34 +44,35 @@ class OverviewHistoryListItem(val mDate: Date, val mTimeUsage: Time) {
         }
 
         private fun isToday(date: Date): Boolean {
-            if (date.day == Calendar.DAY_OF_MONTH && date.month == Calendar.MONTH
-                    && date.year == Calendar.YEAR) return true
+            if (date.date == Calendar.getInstance().get(Calendar.DATE) &&
+                    date.month == Calendar.getInstance().get(Calendar.MONTH) &&
+                    date.year == Calendar.getInstance().get(Calendar.YEAR)) return true
             return false
         }
 
         private fun isYesterday(date: Date): Boolean {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.DATE, -1)
-            if (date.day == calendar.time.day && date.month == calendar.time.month &&
+            if (date.date == calendar.time.date && date.month == calendar.time.month &&
                     date.year == calendar.time.year) return true
             return false
         }
 
         private fun isSameYear(date: Date): Boolean {
-            if (date.year == Calendar.YEAR) return true
+            if (date.year == Calendar.getInstance().get(Calendar.YEAR)) return true
             return false
         }
     }
 
     fun getFormattedDate(): String {
-        if (isToday()) {
+        if (isToday(mDate)) {
             return TODAY_STRING
-        } else if (isYesterday()) {
+        } else if (isYesterday(mDate)) {
             return YESTERDAY_STRING
         } else if (isSameYear(mDate)){
-            return String.format("%s %d%s", MONTHS_LIST[mDate.month - 1], mDate.day, getDateSuffix(mDate))
+            return String.format("%s %d%s", MONTHS_LIST[mDate.month - 1], mDate.date, getDateSuffix(mDate))
         } else {
-            return String.format("%s %d%s %d", MONTHS_LIST[mDate.year - 1], mDate.day, getDateSuffix(mDate),
+            return String.format("%s %d%s %d", MONTHS_LIST[mDate.month - 1], mDate.date, getDateSuffix(mDate),
                     mDate.year)
         }
     }
