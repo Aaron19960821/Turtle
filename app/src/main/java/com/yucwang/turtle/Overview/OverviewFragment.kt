@@ -64,9 +64,14 @@ class OverviewFragment : Fragment() {
     }
 
     private fun prepareData() {
-        mHistoryListData = Array<OverviewHistoryListItem>(5, {OverviewHistoryListItem(Date(2018, 5, 17), Time())})
-        mHistoryListData[0].mDate.year = 2018
-        mHistoryListData[0].mDate.month = 5
+        val database = HistoryListDatabase(context!!)
+
+        database.insertHistoryList(OverviewHistoryListItem.getInstanceFromDatabase("2018-05-17", 15))
+        database.insertHistoryList(OverviewHistoryListItem.getInstanceFromDatabase("2018-05-18", 25))
+        database.insertHistoryList(OverviewHistoryListItem.getInstanceFromDatabase("2018-05-19", 115))
+        database.insertHistoryList(OverviewHistoryListItem.getInstanceFromDatabase("2017-05-18", 20))
+
+        mHistoryListData = database.getAllHistoryList()
     }
 
     companion object {

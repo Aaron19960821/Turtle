@@ -17,6 +17,7 @@ class OverviewHistoryListItem(val mDate: Date, val mTimeUsage: Time) {
         private val HOUR_STRING = "h"
         private val TODAY_STRING = "Today"
         private val YESTERDAY_STRING = "Yesterday"
+        private val MINUTE_PER_HOUR = 60
 
         private val MONTHS_LIST: Array<String> = arrayOf(
                 "Jan",
@@ -62,6 +63,28 @@ class OverviewHistoryListItem(val mDate: Date, val mTimeUsage: Time) {
             if (date.year == Calendar.getInstance().get(Calendar.YEAR)) return true
             return false
         }
+
+        /**
+         * Return an Instance with data from database
+         */
+        fun getInstanceFromDatabase(dateString: String, usageInt: Int): OverviewHistoryListItem {
+            val dataStringList = dateString.split("-".toRegex())
+
+            assert(dataStringList.size == 3)
+            val date = Date(dataStringList[0].toInt(), dataStringList[1].toInt(), dataStringList[2].toInt())
+            val time: Time = Time()
+            time.hour = usageInt / MINUTE_PER_HOUR
+            time.minute = usageInt % MINUTE_PER_HOUR
+            return OverviewHistoryListItem(date, time)
+        }
+    }
+
+    fun encodeDateForDataBase(): String {
+        return String.format("%d-%d-%d", mDate.year, mDate.month, mDate.date)
+    }
+
+    fun encodeUsageForDatabase(): String {
+        return String.format("%d", mTimeUsage.hour * 60 + mTimeUsage.minute)
     }
 
     fun getFormattedDate(): String {
