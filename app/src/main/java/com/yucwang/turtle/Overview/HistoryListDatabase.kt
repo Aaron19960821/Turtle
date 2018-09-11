@@ -3,23 +3,32 @@ package com.yucwang.turtle.Overview
 import android.content.ContentValues
 import android.content.Context
 import android.database.DatabaseUtils
+import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteDatabase
 import android.text.format.Time
 import java.util.*
 
 class HistoryListDatabase(mContext: Context) {
     val mDBHelper = HistoryListDBHelper(mContext)
+    val mReadableDatabase = mDBHelper.readableDatabase
+    val mWritableDatabase = mDBHelper.writableDatabase
 
-    // Add a new item to database
+    /**
+     * Update a new item to the database
+     * If the record to the correspoding day have existed,
+     * Then we will just update it.
+     */
     fun insertHistoryList(historyListItem: OverviewHistoryListItem) {
-        val database = mDBHelper.writableDatabase
 
-        val values = ContentValues().apply {
-            put(HistoryListDBHelper.DATABASE_COLUMN_DATE, historyListItem.encodeDateForDataBase())
-            put(HistoryListDBHelper.DATABASE_COLUMN_USAGE, historyListItem.encodeUsageForDatabase())
+        try {
+            val values = ContentValues().apply {
+                put(HistoryListDBHelper.DATABASE_COLUMN_DATE, historyListItem.encodeDateForDataBase())
+                put(HistoryListDBHelper.DATABASE_COLUMN_USAGE, historyListItem.encodeUsageForDatabase())
+            }
+            val rowId = mWritableDatabase.insertOrThrow(HistoryListDBHelper.DATABASE_TABLENAME, null, values)
+        } catch (exception: SQLiteConstraintException) {
+            updateHistoryList(historyListItem)
         }
-
-        val rowId = database.insert(HistoryListDBHelper.DATABASE_TABLENAME, null, values)
     }
 
     /**
@@ -27,12 +36,11 @@ class HistoryListDatabase(mContext: Context) {
      * Will sort historylist with time decreasing order
      */
     fun getAllHistoryList(): Array<OverviewHistoryListItem> {
-        val database = mDBHelper.readableDatabase
 
         val projection = arrayOf(HistoryListDBHelper.DATABASE_COLUMN_DATE, HistoryListDBHelper.DATABASE_COLUMN_USAGE)
         val sortOrder = "${HistoryListDBHelper.DATABASE_COLUMN_DATE} DESC"
 
-        val cursor = database.query(
+        val cursor = mReadableDatabase.query(
                 HistoryListDBHelper.DATABASE_TABLENAME,
                 projection,
                 null,
@@ -61,15 +69,16 @@ class HistoryListDatabase(mContext: Context) {
      * Update the history list when the record of a day is existed.
      * Do not expose to the public.
      */
-    private fun updateHistoryList(historyListItem: OverviewHistoryListItem, database: SQLiteDatabase) {
-        val values = ContentValues()
+    private fun updateHistoryList(historyListItem: OverviewHistoryListItem) {
         val constraints = "${HistoryListDBHelper.DATABASE_COLUMN_DATE} = ?"
         val whereArgs = arrayOf(historyListItem.encodeDateForDataBase())
 
-        values.put(HistoryListDBHelper.DATABASE_COLUMN_DATE, historyListItem.encodeDateForDataBase())
-        values.put(HistoryListDBHelper.DATABASE_COLUMN_USAGE, historyListItem.encodeUsageForDatabase())
+        val values: ContentValues = ContentValues().apply {
+            put(HistoryListDBHelper.DATABASE_COLUMN_DATE, historyListItem.encodeDateForDataBase())
+            put(HistoryListDBHelper.DATABASE_COLUMN_USAGE, historyListItem.encodeUsageForDatabase())
+        }
 
-        val rowAffected = database.update(
+        val rowAffected = mReadableDatabase.update(
                 HistoryListDBHelper.DATABASE_TABLENAME,
                 values,
                 constraints,
@@ -87,5 +96,14 @@ class HistoryListDatabase(mContext: Context) {
         val result = DatabaseUtils.queryNumEntries(database, HistoryListDBHelper.DATABASE_TABLENAME)
 
         return result
+    }
+
+    /**
+     * Close the database when the database is of no use.
+     */
+    fun close() {
+        mReadableDatabase.close()
+        mWritableDatabase.close()
+        mDBHelper.close()
     }
 }

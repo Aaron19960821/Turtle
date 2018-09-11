@@ -1,6 +1,5 @@
 package com.yucwang.turtle.Overview
 
-
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -11,20 +10,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.yucwang.turtle.Backend.AppUsageManager
 import com.yucwang.turtle.R
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * The overview fragment
  * Created by Yuchen Wong
  */
-class OverviewFragment : Fragment() {
+class OverviewFragment() : Fragment() {
 
     private lateinit var mHistoryList: RecyclerView
     private lateinit var mHistoryListAdapter: HistoryListAdapter
@@ -41,7 +37,7 @@ class OverviewFragment : Fragment() {
 
         mTimeDisplay = mContentView.findViewById(R.id.overview_timedisplay)
         mTimeDisplayTextEdit = mTimeDisplay.findViewById(R.id.timedisplay)
-        mTimeDisplayTextEdit.text = "10h10min"
+        initTimeDisplay()
 
         mHistoryListManager = LinearLayoutManager(activity)
         mHistoryListAdapter = HistoryListAdapter(mHistoryListData, context!!)
@@ -63,15 +59,24 @@ class OverviewFragment : Fragment() {
         super.onResume()
     }
 
+    private fun initTimeDisplay() {
+        assert(mHistoryListData.size > 0)
+        mTimeDisplayTextEdit.text = mHistoryListData[0].getFormattedUsage()
+
+        if (OverviewHistoryListItem.isAlertTimeUsage(mHistoryListData[0].mTimeUsage)) {
+            mTimeDisplay.setBackgroundColor(resources.getColor(R.color.colorAlert))
+        } else {
+            mTimeDisplay.setBackgroundColor(resources.getColor(R.color.colorPass))
+        }
+    }
+
+    /**
+     * Fetch All Data From the database
+     */
     private fun prepareData() {
         val database = HistoryListDatabase(context!!)
-
-        database.insertHistoryList(OverviewHistoryListItem.getInstanceFromDatabase("2018-05-17", 15))
-        database.insertHistoryList(OverviewHistoryListItem.getInstanceFromDatabase("2018-05-18", 25))
-        database.insertHistoryList(OverviewHistoryListItem.getInstanceFromDatabase("2018-05-19", 115))
-        database.insertHistoryList(OverviewHistoryListItem.getInstanceFromDatabase("2017-05-18", 20))
-
         mHistoryListData = database.getAllHistoryList()
+        database.close()
     }
 
     companion object {

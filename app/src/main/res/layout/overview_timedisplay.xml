@@ -7,7 +7,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/overview_timedisplay_height"
-        android:background="@color/colorPass"
         android:id="@+id/timedisplaybackground" />
 
     <TextView

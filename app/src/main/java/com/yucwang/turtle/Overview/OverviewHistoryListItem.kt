@@ -77,6 +77,11 @@ class OverviewHistoryListItem(val mDate: Date, val mTimeUsage: Time) {
             time.minute = usageInt % MINUTE_PER_HOUR
             return OverviewHistoryListItem(date, time)
         }
+
+        fun isAlertTimeUsage(time: Time): Boolean {
+            val minute = time.hour * 60 + time.minute
+            return minute > 120
+        }
     }
 
     fun encodeDateForDataBase(): String {

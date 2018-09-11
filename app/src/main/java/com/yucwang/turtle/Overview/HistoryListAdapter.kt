@@ -31,7 +31,12 @@ class HistoryListAdapter(private val mHistoryList: Array<OverviewHistoryListItem
     override fun onBindViewHolder(holder: HistoryListViewHolder, position: Int) {
         holder.mDateView.text = mHistoryList.get(position).getFormattedDate()
         holder.mUsageView.text = mHistoryList.get(position).getFormattedUsage()
-        holder.mBackgroundView.setBackgroundColor(holder.mBackgroundView.resources.getColor(R.color.colorAlert))
+
+        if (OverviewHistoryListItem.isAlertTimeUsage(mHistoryList[position].mTimeUsage)) {
+            holder.mBackgroundView.setBackgroundColor(holder.mBackgroundView.resources.getColor(R.color.colorAlert))
+        } else {
+            holder.mBackgroundView.setBackgroundColor(holder.mBackgroundView.resources.getColor(R.color.colorPass))
+        }
     }
 
     // The number of history items.
