@@ -16,7 +16,6 @@
         android:textSize="@dimen/overview_timedisplay_timetextsize"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/overview_timedisplay_timepaddingtop"
-        android:text="1h10min"
         android:textColor="@color/textWhite"
         android:paddingBottom="@dimen/overview_timedisplay_padding"/>
 

@@ -6,6 +6,6 @@
     <dimen name="overview_timedisplay_timetextsize">40sp</dimen>
     <dimen name="overview_timedisplay_padding">8dp</dimen>
     <dimen name="overview_historyitem_height">60dp</dimen>
-    <dimen name="overview_historyitem_padding">4dp</dimen>
+    <dimen name="overview_historyitem_padding">8dp</dimen>
     <dimen name="overview_historyitem_textsize">20sp</dimen>
 </resources>

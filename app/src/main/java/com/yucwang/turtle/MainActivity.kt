@@ -1,12 +1,15 @@
 package com.yucwang.turtle
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
 import com.yucwang.turtle.Backend.AppUsageManager
 import com.yucwang.turtle.Overview.HistoryListDatabase
@@ -31,7 +34,11 @@ class MainActivity : AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // This app should get the access of PACKAGE_USAGE_STATS, ask
+        // the user when the permission is not granted.
         startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+
         setContentView(R.layout.activity_main)
         mOverViewDataAdapter = AppUsageManager(this as Context)
 
