@@ -1,16 +1,18 @@
 package com.yucwang.turtle
 
 import android.Manifest
+import android.app.AlertDialog
+import android.app.AppOpsManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Process
 import android.provider.Settings
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.ActionBar
+import android.widget.Toast
 import com.yucwang.turtle.Backend.AppUsageManager
 import com.yucwang.turtle.Overview.HistoryListDatabase
 import com.yucwang.turtle.Overview.OverviewFragment
@@ -37,7 +39,7 @@ class MainActivity : AppCompatActivity(){
 
         // This app should get the access of PACKAGE_USAGE_STATS, ask
         // the user when the permission is not granted.
-        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+        acquirePermission()
 
         setContentView(R.layout.activity_main)
         mOverViewDataAdapter = AppUsageManager(this as Context)
@@ -46,6 +48,32 @@ class MainActivity : AppCompatActivity(){
 
         initBottomNavigationView()
         initFragment()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshAppUsage()
+    }
+
+    private fun acquirePermission() {
+        val appOps = (this as Context).getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+        val mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), (this as Context).packageName)
+
+        if (mode != AppOpsManager.MODE_ALLOWED) {
+            val askPermissionDialogBuilder = AlertDialog.Builder(this@MainActivity)
+            askPermissionDialogBuilder.setTitle("Ask for permission")
+            askPermissionDialogBuilder.setMessage("Turtle need usage state permission to work properly, we will be unable to" +
+                    " work of the permission is not granted.")
+            askPermissionDialogBuilder.setPositiveButton("Yes"){dialog, which ->
+                startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+            }
+            askPermissionDialogBuilder.setNegativeButton("No") {dialog, which ->
+                Toast.makeText(applicationContext, "Permission request denied.", Toast.LENGTH_SHORT).show()
+            }
+
+            val dialog = askPermissionDialogBuilder.create()
+            dialog.show()
+        }
     }
 
     private fun refreshAppUsage() {
