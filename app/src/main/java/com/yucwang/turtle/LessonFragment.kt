@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 
 /**
- * A simple [Fragment] subclass.
- *
+ * The lesson fragment, currently no lesson
+ * is here.
  */
 class LessonFragment : Fragment() {
 
