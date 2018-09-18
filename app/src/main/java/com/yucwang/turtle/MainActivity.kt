@@ -1,10 +1,8 @@
 package com.yucwang.turtle
 
-import android.Manifest
 import android.app.AlertDialog
 import android.app.AppOpsManager
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +12,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.widget.Toast
 import com.yucwang.turtle.Backend.AppUsageManager
+import com.yucwang.turtle.Lesson.LessonFragment
 import com.yucwang.turtle.Overview.HistoryListDatabase
 import com.yucwang.turtle.Overview.OverviewFragment
 import com.yucwang.turtle.Overview.OverviewHistoryListItem
