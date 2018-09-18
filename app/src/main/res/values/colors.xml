@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="colorPass">#0A7E17</color>
-    <color name="colorAlert">#A80C17</color>
+    <color name="colorPass">#83F442</color>
+    <color name="colorAlert">#F92020</color>
     <color name="textWhite">#FEFEFE</color>
 </resources>
