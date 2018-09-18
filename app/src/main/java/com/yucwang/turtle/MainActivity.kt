@@ -97,6 +97,7 @@ class MainActivity : AppCompatActivity(){
     // init the bottom navigation view
     private fun initBottomNavigationView() {
         mBottomNavigationView = this.findViewById(R.id.app_bottombar)
+        BottomNavigationViewHelper.removeShiftMode(mBottomNavigationView)
         mBottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.bottombar_overview -> {
