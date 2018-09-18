@@ -10,10 +10,13 @@ import android.view.WindowManager
 class SystemUiUtils() {
     companion object {
         fun setNavigationBarColor(window: Window, color: Int) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) return
             window.navigationBarColor = color
         }
 
         fun setNavigationBarIconColor(window: Window, color: Int) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) return
+
             val rootView = window.decorView.rootView
             val useLightColor = ColorUtils.shouldUseLightForegroundOnBackground(color)
             var visibility = rootView.systemUiVisibility
@@ -30,7 +33,7 @@ class SystemUiUtils() {
          * @see android.view.Window.setStatusBarColor
          */
         fun setStatusBarColor(window: Window, statusBarColor: Int) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) return
 
             // If both system bars are black, we can remove these from our layout,
             // removing or shrinking the SurfaceFlinger overlay required for our views.
@@ -53,7 +56,7 @@ class SystemUiUtils() {
          * @param useDarkIcons Whether the status bar icons should be dark.
          */
         fun setStatusBarIconColor(window: Window, color: Int) {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O_MR1) return
 
             val rootView = window.decorView.rootView as ViewGroup
             val useDarkIcons = ColorUtils.shouldUseLightForegroundOnBackground(color)
