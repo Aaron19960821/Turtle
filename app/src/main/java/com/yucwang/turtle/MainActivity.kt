@@ -1,10 +1,8 @@
 package com.yucwang.turtle
 
-import android.Manifest
 import android.app.AlertDialog
 import android.app.AppOpsManager
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +12,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.widget.Toast
 import com.yucwang.turtle.Backend.AppUsageManager
+import com.yucwang.turtle.Lesson.LessonFragment
 import com.yucwang.turtle.Overview.HistoryListDatabase
 import com.yucwang.turtle.Overview.OverviewFragment
 import com.yucwang.turtle.Overview.OverviewHistoryListItem
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity(){
             val askPermissionDialogBuilder = AlertDialog.Builder(this@MainActivity)
             askPermissionDialogBuilder.setTitle("Ask for permission")
             askPermissionDialogBuilder.setMessage("Turtle need usage state permission to work properly, we will be unable to" +
-                    " work of the permission is not granted.")
+                    " work if the permission is not granted.")
             askPermissionDialogBuilder.setPositiveButton("Yes"){dialog, which ->
                 startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
             }
@@ -98,6 +97,7 @@ class MainActivity : AppCompatActivity(){
     // init the bottom navigation view
     private fun initBottomNavigationView() {
         mBottomNavigationView = this.findViewById(R.id.app_bottombar)
+        BottomNavigationViewHelper.removeShiftMode(mBottomNavigationView)
         mBottomNavigationView.setOnNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.bottombar_overview -> {

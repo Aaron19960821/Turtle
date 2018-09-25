@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.yucwang.turtle.Backend.AppUsageManager
 import com.yucwang.turtle.R
+import com.yucwang.turtle.Theme.SystemUiUtils
+import com.yucwang.turtle.Theme.ThemeInterface
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -20,7 +22,7 @@ import kotlin.collections.ArrayList
  * The overview fragment
  * Created by Yuchen Wong
  */
-class OverviewFragment() : Fragment() {
+class OverviewFragment() : Fragment(), ThemeInterface {
 
     private lateinit var mHistoryList: RecyclerView
     private lateinit var mHistoryListAdapter: HistoryListAdapter
@@ -47,6 +49,8 @@ class OverviewFragment() : Fragment() {
             adapter = mHistoryListAdapter
         }
 
+        updateSystemUi()
+
         return mContentView
     }
 
@@ -57,6 +61,38 @@ class OverviewFragment() : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        updateSystemUi()
+    }
+
+    override fun updateSystemUi() {
+        val navigationBarColor = getNavigationBarColor()
+        SystemUiUtils.setNavigationBarColor(activity!!.window, navigationBarColor)
+        SystemUiUtils.setNavigationBarIconColor(activity!!.window, navigationBarColor)
+
+        val statusBarColor = getStatusBarColor()
+        SystemUiUtils.setStatusBarColor(activity!!.window, statusBarColor)
+        SystemUiUtils.setStatusBarIconColor(activity!!.window, statusBarColor)
+    }
+
+    override fun getNavigationBarColor(): Int {
+        val navigationBarColor: Int
+        if (OverviewHistoryListItem.isAlertTimeUsage(mHistoryListData[0].mTimeUsage)) {
+            navigationBarColor = resources.getColor(R.color.colorAlert)
+        } else {
+            navigationBarColor = resources.getColor(R.color.colorPass)
+        }
+        return navigationBarColor
+    }
+
+    override fun getStatusBarColor(): Int {
+        val statusBarColor: Int
+        if (OverviewHistoryListItem.isAlertTimeUsage(mHistoryListData[0].mTimeUsage)) {
+            statusBarColor = resources.getColor(R.color.colorAlert)
+        } else {
+            statusBarColor = resources.getColor(R.color.colorPass)
+        }
+        return statusBarColor
     }
 
     private fun initTimeDisplay() {
