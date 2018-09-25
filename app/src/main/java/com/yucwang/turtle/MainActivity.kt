@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(){
             val askPermissionDialogBuilder = AlertDialog.Builder(this@MainActivity)
             askPermissionDialogBuilder.setTitle("Ask for permission")
             askPermissionDialogBuilder.setMessage("Turtle need usage state permission to work properly, we will be unable to" +
-                    " work of the permission is not granted.")
+                    " work if the permission is not granted.")
             askPermissionDialogBuilder.setPositiveButton("Yes"){dialog, which ->
                 startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
             }
