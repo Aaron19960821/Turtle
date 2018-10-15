@@ -85,7 +85,7 @@ class OverviewHistoryListItem(val mDate: Date, val mTimeUsage: Time) {
     }
 
     fun encodeDateForDataBase(): String {
-        return String.format("%d-%d-%d", mDate.year, mDate.month, mDate.date)
+        return String.format("%4d-%2d-%2d", mDate.year, mDate.month, mDate.date)
     }
 
     fun encodeUsageForDatabase(): String {

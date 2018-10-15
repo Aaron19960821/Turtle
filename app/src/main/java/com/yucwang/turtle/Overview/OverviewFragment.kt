@@ -16,6 +16,7 @@ import com.yucwang.turtle.Theme.SystemUiUtils
 import com.yucwang.turtle.Theme.ThemeInterface
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.Comparator
 import kotlin.collections.ArrayList
 
 /**
@@ -107,11 +108,17 @@ class OverviewFragment() : Fragment(), ThemeInterface {
     }
 
     /**
-     * Fetch All Data From the database
+     * Fetch All Data From the database and get it sorted.
      */
     private fun prepareData() {
         val database = HistoryListDatabase(context!!)
         mHistoryListData = database.getAllHistoryList()
+        mHistoryListData.sortWith(object: Comparator<OverviewHistoryListItem> {
+            override fun compare(o1: OverviewHistoryListItem, o2: OverviewHistoryListItem): Int = when {
+                o1.encodeDateForDataBase() > o2.encodeDateForDataBase() -> 1
+                else -> 0
+            }
+        })
         database.close()
     }
 
