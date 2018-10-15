@@ -7,6 +7,7 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Process
+import android.os.SystemClock
 import android.provider.Settings
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
@@ -77,10 +78,7 @@ class MainActivity : AppCompatActivity(){
 
     private fun refreshAppUsage() {
         val usageInInt = mOverViewDataAdapter.getCurrentDayAppUsage()
-        val calendar = Calendar.getInstance()
-
-        val dateString = SimpleDateFormat("yyyy-MM-dd").format(calendar.time)
-        val historyListItem = OverviewHistoryListItem.getInstanceFromDatabase(dateString, usageInInt)
+        val historyListItem = OverviewHistoryListItem(Date(), usageInInt)
 
         // Update today's APP usage
         val database = HistoryListDatabase(this as Context)
