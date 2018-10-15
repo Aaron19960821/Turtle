@@ -22,13 +22,12 @@ class AppUsageManager(mContext: Context): MainActivity.OverViewDataAdapter {
         }
     }
 
-    val MILLSEC_PER_MINUTE: Long = 1000 * 60
     val mUsageStatsManager = mContext.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
     /**
      * Get the Usage of Current Day.
      */
-    override fun getCurrentDayAppUsage(): Int {
+    override fun getCurrentDayAppUsage(): Long {
         Log.d(TAG, "Start getting app usage for the current day.")
 
         val start = getStartOfCurrentDay().timeInMillis
@@ -43,7 +42,7 @@ class AppUsageManager(mContext: Context): MainActivity.OverViewDataAdapter {
             totalTime += usageState.totalTimeInForeground
         }
 
-        return (totalTime / MILLSEC_PER_MINUTE).toInt()
+        return totalTime
     }
 
 }

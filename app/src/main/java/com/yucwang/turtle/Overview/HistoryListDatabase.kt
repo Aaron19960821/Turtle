@@ -50,13 +50,13 @@ class HistoryListDatabase(mContext: Context) {
                 sortOrder
         )
 
-        val historyList = Array<OverviewHistoryListItem>(getHistoryCount().toInt(), { OverviewHistoryListItem(Date(), Time()) })
+        val historyList = Array<OverviewHistoryListItem>(getHistoryCount().toInt(), { OverviewHistoryListItem(Date(), 0) })
         var current = 0
         with (cursor) {
             if (moveToFirst()) {
                 while (!isAfterLast) {
                     val curDate = getString(cursor.getColumnIndexOrThrow(HistoryListDBHelper.DATABASE_COLUMN_DATE))
-                    val curUsage = getInt(cursor.getColumnIndexOrThrow(HistoryListDBHelper.DATABASE_COLUMN_USAGE))
+                    val curUsage = getLong(cursor.getColumnIndexOrThrow(HistoryListDBHelper.DATABASE_COLUMN_USAGE))
                     historyList[current++] = OverviewHistoryListItem.getInstanceFromDatabase(curDate, curUsage)
                     moveToNext()
                 }

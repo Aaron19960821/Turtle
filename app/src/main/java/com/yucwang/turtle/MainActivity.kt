@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(){
         /**
          * Refresh the app usage data
          */
-        fun getCurrentDayAppUsage(): Int
+        fun getCurrentDayAppUsage(): Long
     }
 
     private lateinit var mOverViewDataAdapter: OverViewDataAdapter

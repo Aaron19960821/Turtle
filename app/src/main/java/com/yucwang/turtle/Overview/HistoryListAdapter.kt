@@ -18,7 +18,6 @@ class HistoryListAdapter(private val mHistoryList: Array<OverviewHistoryListItem
         val mBackgroundView = mItemView.findViewById(R.id.listitem_background) as View
         val mDateView = mItemView.findViewById(R.id.listitem_date) as TextView
         val mUsageView = mItemView.findViewById(R.id.listitem_usage) as TextView
-        val mProgressBarView = mItemView.findViewById(R.id.listitem_progressbar) as View
     }
 
     // Create new recycler view list item
