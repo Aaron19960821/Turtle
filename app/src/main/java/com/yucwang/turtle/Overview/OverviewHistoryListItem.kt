@@ -75,15 +75,15 @@ class OverviewHistoryListItem(val mDate: Date, val mTimeUsage: Long) {
      * in Java has been deprecated.
      */
     fun Date.getDayInt(): Int {
-        return SimpleDateFormat(DATE_ENCODING_FORMAT).format(this).split("-".toRegex())[2].toInt()
+        return SimpleDateFormat(DATE_ENCODING_FORMAT).format(this).split("-".toRegex())[2].trim().toInt()
     }
 
     fun Date.getMonthInt(): Int {
-        return SimpleDateFormat(DATE_ENCODING_FORMAT).format(this).split("-".toRegex())[1].toInt()
+        return SimpleDateFormat(DATE_ENCODING_FORMAT).format(this).split("-".toRegex())[1].trim().toInt()
     }
 
     fun Date.getYearInt(): Int {
-        return SimpleDateFormat(DATE_ENCODING_FORMAT).format(this).split("-".toRegex())[0].toInt()
+        return SimpleDateFormat(DATE_ENCODING_FORMAT).format(this).split("-".toRegex())[0].trim().toInt()
     }
 
     // get the suffix of a date
