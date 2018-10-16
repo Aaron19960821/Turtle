@@ -2,7 +2,7 @@
 
 package com.yucwang.turtle.Overview
 
-import android.text.format.Time
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -10,14 +10,16 @@ import java.util.*
  * @mDate: the date of record
  * @mTimeUsage: the length of time we use on that day
  */
-class OverviewHistoryListItem(val mDate: Date, val mTimeUsage: Time) {
+class OverviewHistoryListItem(val mDate: Date, val mTimeUsage: Long) {
 
     companion object {
+        private val DATE_ENCODING_FORMAT = "yyyy-MM-dd"
         private val MINUTE_STRING = "min"
         private val HOUR_STRING = "h"
         private val TODAY_STRING = "Today"
         private val YESTERDAY_STRING = "Yesterday"
         private val MINUTE_PER_HOUR = 60
+        private val MILLISECONDS_PER_MINUTE = 60000
 
         private val MONTHS_LIST: Array<String> = arrayOf(
                 "Jan",
@@ -34,80 +36,91 @@ class OverviewHistoryListItem(val mDate: Date, val mTimeUsage: Time) {
                 "Dec"
         )
 
-        // get the suffix of a date
-        private fun getDateSuffix(date: Date): String {
-            when (date.date % 10) {
-                1 -> return "st"
-                2 -> return "nd"
-                3 -> return "rd"
-                else -> return "th"
-            }
-        }
-
-        private fun isToday(date: Date): Boolean {
-            if (date.date == Calendar.getInstance().get(Calendar.DATE) &&
-                    date.month == Calendar.getInstance().get(Calendar.MONTH) &&
-                    date.year == Calendar.getInstance().get(Calendar.YEAR)) return true
-            return false
-        }
-
-        private fun isYesterday(date: Date): Boolean {
-            val calendar = Calendar.getInstance()
-            calendar.add(Calendar.DATE, -1)
-            if (date.date == calendar.time.date && date.month == calendar.time.month &&
-                    date.year == calendar.time.year) return true
-            return false
-        }
-
-        private fun isSameYear(date: Date): Boolean {
-            if (date.year == Calendar.getInstance().get(Calendar.YEAR)) return true
-            return false
-        }
-
         /**
          * Return an Instance with data from database
          */
-        fun getInstanceFromDatabase(dateString: String, usageInt: Int): OverviewHistoryListItem {
-            val dataStringList = dateString.split("-".toRegex())
-
-            assert(dataStringList.size == 3)
-            val date = Date(dataStringList[0].toInt(), dataStringList[1].toInt(), dataStringList[2].toInt())
-            val time: Time = Time()
-            time.hour = usageInt / MINUTE_PER_HOUR
-            time.minute = usageInt % MINUTE_PER_HOUR
-            return OverviewHistoryListItem(date, time)
+        fun getInstanceFromDatabase(dateString: String, usage: Long): OverviewHistoryListItem {
+            val date: Date = SimpleDateFormat(DATE_ENCODING_FORMAT).parse(dateString)
+            return OverviewHistoryListItem(date, usage)
         }
 
-        fun isAlertTimeUsage(time: Time): Boolean {
-            val minute = time.hour * 60 + time.minute
+        fun isAlertTimeUsage(time: Long): Boolean {
+            val minute = time / MILLISECONDS_PER_MINUTE
             return minute > 120
         }
     }
 
-    fun encodeDateForDataBase(): String {
-        return String.format("%4d-%2d-%2d", mDate.year, mDate.month, mDate.date)
+    fun Date.isCurrentDay(): Boolean {
+        if (getDayInt() == Calendar.getInstance().get(Calendar.DATE) &&
+                getMonthInt() == Calendar.getInstance().get(Calendar.MONTH) &&
+                getYearInt() == Calendar.getInstance().get(Calendar.YEAR)) return true
+        return false
     }
 
-    fun encodeUsageForDatabase(): String {
-        return String.format("%d", mTimeUsage.hour * 60 + mTimeUsage.minute)
+    fun Date.isYesterday(): Boolean {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DATE, -1)
+        if (getDayInt() == calendar.get(Calendar.DATE) && getMonthInt() == calendar.get(Calendar.MONTH) &&
+                getYearInt() == calendar.get(Calendar.YEAR)) return true
+        return false
+    }
+
+    fun Date.isCurrentYear(): Boolean {
+        if (getYearInt() == Calendar.getInstance().get(Calendar.YEAR)) return true
+        return false
+    }
+
+    /**
+     * Return the day, month, year in integer since the functions
+     * in Java has been deprecated.
+     */
+    fun Date.getDayInt(): Int {
+        return SimpleDateFormat(DATE_ENCODING_FORMAT).format(this).split("-".toRegex())[2].trim().toInt()
+    }
+
+    fun Date.getMonthInt(): Int {
+        return SimpleDateFormat(DATE_ENCODING_FORMAT).format(this).split("-".toRegex())[1].trim().toInt()
+    }
+
+    fun Date.getYearInt(): Int {
+        return SimpleDateFormat(DATE_ENCODING_FORMAT).format(this).split("-".toRegex())[0].trim().toInt()
+    }
+
+    // get the suffix of a date
+    fun Date.getSuffix(): String {
+        when (getDayInt() % 10) {
+            1 -> return "st"
+            2 -> return "nd"
+            3 -> return "rd"
+            else -> return "th"
+        }
+    }
+
+    fun encodeDateForDataBase(): String {
+        return SimpleDateFormat(DATE_ENCODING_FORMAT).format(mDate)
+    }
+
+    fun encodeUsageForDatabase(): Long {
+        return mTimeUsage
     }
 
     fun getFormattedDate(): String {
-        if (isToday(mDate)) {
+        if (mDate.isCurrentDay()) {
             return TODAY_STRING
-        } else if (isYesterday(mDate)) {
+        } else if (mDate.isYesterday()) {
             return YESTERDAY_STRING
-        } else if (isSameYear(mDate)){
-            return String.format("%s %d%s", MONTHS_LIST[mDate.month - 1], mDate.date, getDateSuffix(mDate))
+        } else if (mDate.isCurrentYear()) {
+            return String.format("%s %d%s", MONTHS_LIST[mDate.getMonthInt() - 1], mDate.getDayInt(), mDate.getSuffix())
         } else {
-            return String.format("%s %d%s %d", MONTHS_LIST[mDate.month - 1], mDate.date, getDateSuffix(mDate),
-                    mDate.year)
+            return String.format("%s %d%s %d", MONTHS_LIST[mDate.getMonthInt() - 1], mDate.getDayInt(), mDate.getSuffix(),
+                    mDate.getYearInt())
         }
     }
 
     fun getFormattedUsage(): String {
-        val hour = mTimeUsage.hour
-        val minute = mTimeUsage.minute
+        val totalMins = mTimeUsage / MILLISECONDS_PER_MINUTE
+        val hour = totalMins / MINUTE_PER_HOUR
+        val minute = totalMins % MINUTE_PER_HOUR
         var formattedUsage: String
 
         if (hour > 0) {
