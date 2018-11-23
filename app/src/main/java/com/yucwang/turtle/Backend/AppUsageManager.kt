@@ -8,10 +8,12 @@ import android.util.Log
 import com.yucwang.turtle.MainActivity
 import java.util.*
 
-class AppUsageManager(mContext: Context): MainActivity.OverViewDataAdapter {
+class AppUsageManager() {
     private val TAG = "AppUsageManager"
 
     companion object {
+        private var sInstance : AppUsageManager = AppUsageManager()
+
         fun getStartOfCurrentDay(): Calendar {
             val calendar = Calendar.getInstance()
             calendar.add(Calendar.HOUR, -Calendar.HOUR_OF_DAY)
@@ -20,16 +22,22 @@ class AppUsageManager(mContext: Context): MainActivity.OverViewDataAdapter {
 
             return calendar
         }
-    }
 
-    val mUsageStatsManager = mContext.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        fun getInstance() : AppUsageManager {
+            if (sInstance == null) {
+                sInstance = AppUsageManager()
+            }
+            return sInstance
+        }
+    }
 
     /**
      * Get the Usage of Current Day.
      */
-    override fun getCurrentDayAppUsage(): Long {
+    fun getCurrentDayAppUsage(context: Context): Long {
         Log.d(TAG, "Start getting app usage for the current day.")
 
+        val mUsageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
         val start = getStartOfCurrentDay().timeInMillis
         val end = System.currentTimeMillis()
         val usageList: List<UsageStats> = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,

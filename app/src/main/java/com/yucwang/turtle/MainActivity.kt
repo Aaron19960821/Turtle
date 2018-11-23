@@ -2,57 +2,85 @@ package com.yucwang.turtle
 
 import android.app.AlertDialog
 import android.app.AppOpsManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.IBinder
 import android.os.Process
-import android.os.SystemClock
+import android.preference.PreferenceManager
 import android.provider.Settings
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.widget.Toast
-import com.yucwang.turtle.Backend.AppUsageManager
 import com.yucwang.turtle.Lesson.LessonFragment
-import com.yucwang.turtle.Overview.HistoryListDatabase
 import com.yucwang.turtle.Overview.OverviewFragment
-import com.yucwang.turtle.Overview.OverviewHistoryListItem
-import java.text.SimpleDateFormat
-import java.util.*
+import com.yucwang.turtle.Services.TurtleService
 
-class MainActivity : AppCompatActivity(){
-
-    interface OverViewDataAdapter {
-        /**
-         * Refresh the app usage data
-         */
-        fun getCurrentDayAppUsage(): Long
-    }
-
-    private lateinit var mOverViewDataAdapter: OverViewDataAdapter
+class MainActivity : AppCompatActivity(), TurtleService.TurtleServiceCallback{
 
     private lateinit var mBottomNavigationView: BottomNavigationView
-    private lateinit var mFragment: Fragment
+    private lateinit var mFragment: TurtleFragment
+
+    inner class TurtleServiceConnectionImpl() : ServiceConnection {
+        private var isBound = false
+        private lateinit var mService : TurtleService
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val turtleServiceBinder : TurtleService.TurtleServiceBinder = service as TurtleService.TurtleServiceBinder
+            val turtleService = turtleServiceBinder.turtleService
+            mService = turtleService
+            turtleService.mTurtleServiceCallback = this@MainActivity
+            isBound = true
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            isBound = false
+        }
+
+        fun disconnectService() {
+            if (isBound) {
+                isBound = false
+                mService.mTurtleServiceCallback = null
+                unbindService(this)
+            }
+        }
+    }
+    private val mTurtleServiceConnection : TurtleServiceConnectionImpl = TurtleServiceConnectionImpl()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // This app should get the access of PACKAGE_USAGE_STATS, ask
-        // the user when the permission is not granted.
-        acquirePermission()
+        val isFirstRun = PreferenceManager.getDefaultSharedPreferences(this as Context).getBoolean(TurtleConstants.FIRST_RUN_PREF, true)
+        if (isFirstRun) {
+            // This app should get the access of PACKAGE_USAGE_STATS, ask
+            // the user when the permission is not granted.
+            acquirePermission()
+        }
+        PreferenceManager.getDefaultSharedPreferences(this as Context).edit().putBoolean(TurtleConstants.FIRST_RUN_PREF, false).apply()
+        runOnUiThread(Runnable {
+            startService(Intent(this, TurtleService::class.java))
+            setContentView(R.layout.activity_main)
+            initBottomNavigationView()
+            initFragment()
+        })
+    }
 
-        setContentView(R.layout.activity_main)
-        mOverViewDataAdapter = AppUsageManager(this as Context)
+    override fun onStart() {
+        super.onStart()
+        val intent : Intent = Intent(this, TurtleService::class.java)
+        bindService(intent, mTurtleServiceConnection, Context.BIND_AUTO_CREATE)
+    }
 
-        refreshAppUsage()
-
-        initBottomNavigationView()
-        initFragment()
+    override fun onStop() {
+        super.onStop()
+        mTurtleServiceConnection.disconnectService()
     }
 
     override fun onResume() {
         super.onResume()
-        refreshAppUsage()
     }
 
     private fun acquirePermission() {
@@ -74,16 +102,6 @@ class MainActivity : AppCompatActivity(){
             val dialog = askPermissionDialogBuilder.create()
             dialog.show()
         }
-    }
-
-    private fun refreshAppUsage() {
-        val usageInInt = mOverViewDataAdapter.getCurrentDayAppUsage()
-        val historyListItem = OverviewHistoryListItem(Date(), usageInInt)
-
-        // Update today's APP usage
-        val database = HistoryListDatabase(this as Context)
-        database.insertHistoryList(historyListItem)
-        database.close()
     }
 
     // By default will open Overview Fragment
@@ -129,8 +147,12 @@ class MainActivity : AppCompatActivity(){
 
     private fun openFragment() {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.content_view, mFragment)
+        transaction.replace(R.id.content_view, mFragment as Fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    override fun onTaskFinished() {
+        mFragment.onAppUsageDataChanged()
     }
 }

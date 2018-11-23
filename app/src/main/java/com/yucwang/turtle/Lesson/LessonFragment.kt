@@ -9,12 +9,13 @@ import android.view.ViewGroup
 import com.yucwang.turtle.R
 import com.yucwang.turtle.Theme.SystemUiUtils
 import com.yucwang.turtle.Theme.ThemeInterface
+import com.yucwang.turtle.TurtleFragment
 
 /**
  * The lesson fragment, currently no lesson
  * is here.
  */
-class LessonFragment : Fragment(), ThemeInterface {
+class LessonFragment : TurtleFragment(), ThemeInterface {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

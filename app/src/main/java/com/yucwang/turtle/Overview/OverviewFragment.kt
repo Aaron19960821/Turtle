@@ -14,6 +14,7 @@ import com.yucwang.turtle.Backend.AppUsageManager
 import com.yucwang.turtle.R
 import com.yucwang.turtle.Theme.SystemUiUtils
 import com.yucwang.turtle.Theme.ThemeInterface
+import com.yucwang.turtle.TurtleFragment
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.Comparator
@@ -23,7 +24,7 @@ import kotlin.collections.ArrayList
  * The overview fragment
  * Created by Yuchen Wong
  */
-class OverviewFragment() : Fragment(), ThemeInterface {
+class OverviewFragment() : TurtleFragment(), ThemeInterface {
 
     private lateinit var mHistoryList: RecyclerView
     private lateinit var mHistoryListAdapter: HistoryListAdapter
@@ -77,33 +78,33 @@ class OverviewFragment() : Fragment(), ThemeInterface {
     }
 
     override fun getNavigationBarColor(): Int {
-        val navigationBarColor: Int
-        if (OverviewHistoryListItem.isAlertTimeUsage(mHistoryListData[0].mTimeUsage)) {
+        var navigationBarColor: Int = resources.getColor(R.color.colorPass)
+        if (mHistoryListData.size > 0 && OverviewHistoryListItem.isAlertTimeUsage(mHistoryListData[0].mTimeUsage)) {
             navigationBarColor = resources.getColor(R.color.colorAlert)
-        } else {
-            navigationBarColor = resources.getColor(R.color.colorPass)
         }
         return navigationBarColor
     }
 
     override fun getStatusBarColor(): Int {
-        val statusBarColor: Int
-        if (OverviewHistoryListItem.isAlertTimeUsage(mHistoryListData[0].mTimeUsage)) {
+        var statusBarColor: Int = resources.getColor(R.color.colorPass)
+        if (mHistoryListData.size > 0 && OverviewHistoryListItem.isAlertTimeUsage(mHistoryListData[0].mTimeUsage)) {
             statusBarColor = resources.getColor(R.color.colorAlert)
-        } else {
-            statusBarColor = resources.getColor(R.color.colorPass)
         }
         return statusBarColor
     }
 
     private fun initTimeDisplay() {
         assert(mHistoryListData.size > 0)
-        mTimeDisplayTextEdit.text = mHistoryListData[0].getFormattedUsage()
+        if (mHistoryListData.size > 0) {
+            mTimeDisplayTextEdit.text = mHistoryListData[0].getFormattedUsage()
 
-        if (OverviewHistoryListItem.isAlertTimeUsage(mHistoryListData[0].mTimeUsage)) {
-            mTimeDisplay.setBackgroundColor(resources.getColor(R.color.colorAlert))
+            if (OverviewHistoryListItem.isAlertTimeUsage(mHistoryListData[0].mTimeUsage)) {
+                mTimeDisplay.setBackgroundColor(resources.getColor(R.color.colorAlert))
+            } else {
+                mTimeDisplay.setBackgroundColor(resources.getColor(R.color.colorPass))
+            }
         } else {
-            mTimeDisplay.setBackgroundColor(resources.getColor(R.color.colorPass))
+            mTimeDisplay.setBackgroundColor(resources.getColor(R.color.colorPass));
         }
     }
 
@@ -120,6 +121,15 @@ class OverviewFragment() : Fragment(), ThemeInterface {
             }
         })
         database.close()
+    }
+
+    override fun onAppUsageDataChanged() {
+        super.onAppUsageDataChanged()
+        prepareData()
+        initTimeDisplay()
+        mHistoryListAdapter.mHistoryList = mHistoryListData
+        mHistoryListAdapter.notifyDataSetChanged()
+        updateSystemUi()
     }
 
     companion object {
