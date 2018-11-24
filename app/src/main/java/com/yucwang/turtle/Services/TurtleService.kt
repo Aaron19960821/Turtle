@@ -1,8 +1,7 @@
 package com.yucwang.turtle.Services
 
-import android.app.Notification
-import android.app.NotificationManager
-import android.app.Service
+import android.app.*
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
@@ -14,6 +13,9 @@ import com.yucwang.turtle.Overview.OverviewHistoryListItem
 import com.yucwang.turtle.R
 import java.util.*
 
+/**
+ * The turtle class, used to monitor the current usage of android devices
+ */
 class TurtleService : Service() {
 
     private lateinit var mNotifivationManager : NotificationManager
@@ -29,6 +31,22 @@ class TurtleService : Service() {
     override fun onCreate() {
         mNotifivationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         runTask(true)
+        startRepeatingAppUsageSync()
+    }
+
+    /**
+     * We will update the device usage once an hour
+     */
+    private fun startRepeatingAppUsageSync() {
+        var currentTime = System.currentTimeMillis()
+        currentTime = currentTime - (currentTime % (60 * 60 * 1000))
+        val intent = Intent(this as Context, TurtleBroadcastReceiver::class.java)
+        val alarmRunning = (PendingIntent.getBroadcast(this as Context, 0, intent, PendingIntent.FLAG_NO_CREATE) != null)
+        if (!alarmRunning) {
+            val pendingIntent = PendingIntent.getBroadcast(this as Context, 0, intent, 0)
+            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, currentTime, 60 * 60 * 1000, pendingIntent)
+        }
     }
 
     override fun onBind(intent : Intent) : IBinder? {
