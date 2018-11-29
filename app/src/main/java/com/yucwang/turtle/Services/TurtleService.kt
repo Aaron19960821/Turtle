@@ -20,6 +20,7 @@ class TurtleService : Service() {
     companion object {
         val INVOKER_NAME = "invoker_name"
         val NORMAL_BROADCAST = "normal_broadcast_sync"
+        val CALL_FROM_MAIN_ACTIVITY = "main_activity"
     }
 
     private lateinit var mNotifivationManager : NotificationManager
@@ -41,13 +42,15 @@ class TurtleService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val invokerName = intent!!.getStringExtra(INVOKER_NAME)
+        val invokerName : String? = intent!!.getStringExtra(INVOKER_NAME)
         var isImportant = false
         var shouldSendDailyNotification = false
         if (invokerName != null && invokerName.equals(NORMAL_BROADCAST)) {
             mTriggerIndex = (mTriggerIndex + 1) % 24
             isImportant = (mTriggerIndex % 2 == 0)
             shouldSendDailyNotification = (mTriggerIndex == 12)
+        } else if (invokerName != null && invokerName.equals(CALL_FROM_MAIN_ACTIVITY)) {
+            isImportant = true
         }
 
         runTask(isImportant)

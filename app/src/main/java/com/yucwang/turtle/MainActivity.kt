@@ -56,7 +56,9 @@ class MainActivity : AppCompatActivity(), TurtleService.TurtleServiceCallback{
         acquirePermission()
         PreferenceManager.getDefaultSharedPreferences(this as Context).edit().putBoolean(TurtleConstants.FIRST_RUN_PREF, false).apply()
         runOnUiThread(Runnable {
-            startService(Intent(this, TurtleService::class.java))
+            val intent = Intent(this, TurtleService::class.java)
+            intent.putExtra(TurtleService.INVOKER_NAME, TurtleService.CALL_FROM_MAIN_ACTIVITY)
+            startService(intent)
             setContentView(R.layout.activity_main)
             initBottomNavigationView()
             initFragment()
@@ -76,6 +78,10 @@ class MainActivity : AppCompatActivity(), TurtleService.TurtleServiceCallback{
 
     override fun onResume() {
         super.onResume()
+        val intent = Intent(this, TurtleService::class.java)
+        intent.putExtra(TurtleService.INVOKER_NAME, TurtleService.CALL_FROM_MAIN_ACTIVITY)
+        startService(intent)
+        mFragment.onResume()
     }
 
     private fun acquirePermission() {
