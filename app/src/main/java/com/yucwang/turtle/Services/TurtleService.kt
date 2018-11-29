@@ -17,10 +17,15 @@ import java.util.*
  * The turtle class, used to monitor the current usage of android devices
  */
 class TurtleService : Service() {
+    companion object {
+        val INVOKER_NAME = "invoker_name"
+        val NORMAL_BROADCAST = "normal_broadcast_sync"
+    }
 
     private lateinit var mNotifivationManager : NotificationManager
     var mTurtleServiceCallback : TurtleService.TurtleServiceCallback? = null
     private val mBinder : TurtleServiceBinder = TurtleServiceBinder(this)
+    private var mTriggerIndex : Int = 0
 
     interface TurtleServiceCallback {
         fun onTaskFinished()
@@ -32,6 +37,26 @@ class TurtleService : Service() {
         mNotifivationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         runTask(true)
         startRepeatingAppUsageSync()
+        runTask(true)
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val invokerName = intent!!.getStringExtra(INVOKER_NAME)
+        var isImportant = false
+        var shouldSendDailyNotification = false
+        if (invokerName != null && invokerName.equals(NORMAL_BROADCAST)) {
+            mTriggerIndex = (mTriggerIndex + 1) % 24
+            isImportant = (mTriggerIndex % 2 == 0)
+            shouldSendDailyNotification = (mTriggerIndex == 12)
+        }
+
+        runTask(isImportant)
+
+        if (shouldSendDailyNotification) {
+            pushDailyNotification()
+        }
+
+        return super.onStartCommand(intent, flags, startId)
     }
 
     /**
@@ -58,6 +83,8 @@ class TurtleService : Service() {
         sendOnDestroyNotification()
     }
 
+    fun pushDailyNotification() { }
+
     /**
      * Send the on destroy notification to user to inform them
      * to restart Turtle
@@ -82,14 +109,12 @@ class TurtleService : Service() {
         override fun doInBackground(vararg params: Boolean?) : Void? {
             val usageInInt = AppUsageManager.getInstance().getCurrentDayAppUsage(this@TurtleService as Context)
             // when the task is important, sync with database
-            if (params[0]!!) {
-                val historyListItem = OverviewHistoryListItem(Date(), usageInInt)
+            val historyListItem = OverviewHistoryListItem(Date(), usageInInt)
 
-                // Update today's APP usage
-                val database = HistoryListDatabase(this@TurtleService as Context)
-                database.insertHistoryList(historyListItem)
-                database.close()
-            }
+            // Update today's APP usage
+            val database = HistoryListDatabase(this@TurtleService as Context)
+            database.insertHistoryList(historyListItem)
+            database.close()
             return null
         }
 

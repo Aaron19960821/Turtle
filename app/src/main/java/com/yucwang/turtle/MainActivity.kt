@@ -53,12 +53,7 @@ class MainActivity : AppCompatActivity(), TurtleService.TurtleServiceCallback{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val isFirstRun = PreferenceManager.getDefaultSharedPreferences(this as Context).getBoolean(TurtleConstants.FIRST_RUN_PREF, true)
-        if (isFirstRun) {
-            // This app should get the access of PACKAGE_USAGE_STATS, ask
-            // the user when the permission is not granted.
-            acquirePermission()
-        }
+        acquirePermission()
         PreferenceManager.getDefaultSharedPreferences(this as Context).edit().putBoolean(TurtleConstants.FIRST_RUN_PREF, false).apply()
         runOnUiThread(Runnable {
             startService(Intent(this, TurtleService::class.java))
