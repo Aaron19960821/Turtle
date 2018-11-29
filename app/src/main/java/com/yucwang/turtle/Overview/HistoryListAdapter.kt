@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.yucwang.turtle.R
 import org.w3c.dom.Text
 
-class HistoryListAdapter(private val mHistoryList: Array<OverviewHistoryListItem>, private val mContext: Context):
+class HistoryListAdapter(var mHistoryList: Array<OverviewHistoryListItem>, private val mContext: Context):
         RecyclerView.Adapter<HistoryListAdapter.HistoryListViewHolder>() {
 
     class HistoryListViewHolder(val mItemView: View): RecyclerView.ViewHolder(mItemView) {
