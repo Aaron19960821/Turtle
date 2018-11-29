@@ -65,7 +65,6 @@ class OverviewFragment() : TurtleFragment(), ThemeInterface {
         super.onResume()
 
         updateSystemUi()
-        updateOverviewState()
     }
 
     override fun updateSystemUi() {
@@ -92,14 +91,6 @@ class OverviewFragment() : TurtleFragment(), ThemeInterface {
             statusBarColor = resources.getColor(R.color.colorAlert)
         }
         return statusBarColor
-    }
-
-    private fun updateOverviewState() {
-        prepareData()
-        if (mHistoryListData.size > 0) {
-            mTimeDisplayTextEdit.text = mHistoryListData[0].getFormattedUsage()
-        }
-        mHistoryListAdapter.notifyDataSetChanged()
     }
 
     private fun initTimeDisplay() {
@@ -135,7 +126,9 @@ class OverviewFragment() : TurtleFragment(), ThemeInterface {
     override fun onAppUsageDataChanged() {
         super.onAppUsageDataChanged()
         prepareData()
-        initTimeDisplay()
+        if (mHistoryListData.size > 0) {
+            mTimeDisplayTextEdit.text = mHistoryListData[0].getFormattedUsage()
+        }
         mHistoryListAdapter.mHistoryList = mHistoryListData
         mHistoryListAdapter.notifyDataSetChanged()
         updateSystemUi()
