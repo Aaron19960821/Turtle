@@ -18,6 +18,7 @@ import android.widget.Toast
 import com.yucwang.turtle.Lesson.LessonFragment
 import com.yucwang.turtle.Overview.OverviewFragment
 import com.yucwang.turtle.Services.TurtleService
+import com.yucwang.turtle.Utils.TurtleUtils
 
 class MainActivity : AppCompatActivity(), TurtleService.TurtleServiceCallback{
 
@@ -53,12 +54,8 @@ class MainActivity : AppCompatActivity(), TurtleService.TurtleServiceCallback{
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        acquirePermission()
-        PreferenceManager.getDefaultSharedPreferences(this as Context).edit().putBoolean(TurtleConstants.FIRST_RUN_PREF, false).apply()
         runOnUiThread(Runnable {
-            val intent = Intent(this, TurtleService::class.java)
-            intent.putExtra(TurtleService.INVOKER_NAME, TurtleService.CALL_FROM_MAIN_ACTIVITY)
-            startService(intent)
+            acquirePermission()
             setContentView(R.layout.activity_main)
             initBottomNavigationView()
             initFragment()
@@ -85,10 +82,7 @@ class MainActivity : AppCompatActivity(), TurtleService.TurtleServiceCallback{
     }
 
     private fun acquirePermission() {
-        val appOps = (this as Context).getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-        val mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), (this as Context).packageName)
-
-        if (mode != AppOpsManager.MODE_ALLOWED) {
+        if (!TurtleUtils.haveAppUsagePermission(this@MainActivity as Context)) {
             val askPermissionDialogBuilder = AlertDialog.Builder(this@MainActivity)
             askPermissionDialogBuilder.setTitle("Ask for permission")
             askPermissionDialogBuilder.setMessage("Turtle need usage state permission to work properly, we will be unable to" +

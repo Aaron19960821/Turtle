@@ -11,6 +11,7 @@ import com.yucwang.turtle.Backend.AppUsageManager
 import com.yucwang.turtle.Overview.HistoryListDatabase
 import com.yucwang.turtle.Overview.OverviewHistoryListItem
 import com.yucwang.turtle.R
+import com.yucwang.turtle.Utils.TurtleUtils
 import java.util.*
 
 /**
@@ -27,6 +28,7 @@ class TurtleService : Service() {
     var mTurtleServiceCallback : TurtleService.TurtleServiceCallback? = null
     private val mBinder : TurtleServiceBinder = TurtleServiceBinder(this)
     private var mTriggerIndex : Int = 0
+    private val mAppUsageManager = AppUsageManager(this as Context)
 
     interface TurtleServiceCallback {
         fun onTaskFinished()
@@ -42,21 +44,24 @@ class TurtleService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val invokerName : String? = intent!!.getStringExtra(INVOKER_NAME)
-        var isImportant = false
-        var shouldSendDailyNotification = false
-        if (invokerName != null && invokerName.equals(NORMAL_BROADCAST)) {
-            mTriggerIndex = (mTriggerIndex + 1) % 24
-            isImportant = (mTriggerIndex % 2 == 0)
-            shouldSendDailyNotification = (mTriggerIndex == 12)
-        } else if (invokerName != null && invokerName.equals(CALL_FROM_MAIN_ACTIVITY)) {
-            isImportant = true
-        }
+        // only when we have the permission can we do something here.
+        if (TurtleUtils.haveAppUsagePermission(this as Context)) {
+            val invokerName: String? = intent!!.getStringExtra(INVOKER_NAME)
+            var isImportant = false
+            var shouldSendDailyNotification = false
+            if (invokerName != null && invokerName.equals(NORMAL_BROADCAST)) {
+                mTriggerIndex = (mTriggerIndex + 1) % 24
+                isImportant = (mTriggerIndex % 2 == 0)
+                shouldSendDailyNotification = (mTriggerIndex == 12)
+            } else if (invokerName != null && invokerName.equals(CALL_FROM_MAIN_ACTIVITY)) {
+                isImportant = true
+            }
 
-        runTask(isImportant)
+            runTask(isImportant)
 
-        if (shouldSendDailyNotification) {
-            pushDailyNotification()
+            if (shouldSendDailyNotification) {
+                pushDailyNotification()
+            }
         }
 
         return super.onStartCommand(intent, flags, startId)
@@ -110,7 +115,7 @@ class TurtleService : Service() {
 
     inner class AppUsageUpdateTask() : AsyncTask<Boolean, Void?, Void?>() {
         override fun doInBackground(vararg params: Boolean?) : Void? {
-            val usageInInt = AppUsageManager.getInstance().getCurrentDayAppUsage(this@TurtleService as Context)
+            val usageInInt = mAppUsageManager.getCurrentDayAppUsage()
             // when the task is important, sync with database
             val historyListItem = OverviewHistoryListItem(Date(), usageInInt)
 
