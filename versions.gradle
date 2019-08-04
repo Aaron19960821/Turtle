@@ -1,0 +1,15 @@
+// Copyright 2019 Yuchen Wang
+
+ext.deps = [:]
+def versions = [:]
+
+versions.kotlin_version = "1.2.61"
+versions.room = "2.1.0"
+ext.versions = versions
+
+def room = [:]
+room.runtime = "androidx.room:room-runtime:$versions.room"
+room.compiler = "androidx.room:room-compiler:$versions.room"
+room.compiler = "androidx.room:room-rxjava2:$versions.room"
+room.compiler = "androidx.room:room-testing:$versions.room"
+deps.room = room
