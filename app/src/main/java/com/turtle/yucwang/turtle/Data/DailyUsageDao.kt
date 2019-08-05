@@ -12,9 +12,6 @@ interface DailyUsageDao {
     @Query("SELECT * FROM daily_usage ORDER BY date")
     fun getAllDailyUsage(): LiveData<LiveData<DailyUsage>>
 
-    @Query("SELECT * FROM daily_usage WHERE id = :id")
-    fun getDailyUsageById(id: String): LiveData<DailyUsage>
-
     @Query("SELECT * FROM daily_usage WHERE date = :date")
     fun getDailyUsageByDate(date: Date): LiveData<DailyUsage>
 

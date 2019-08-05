@@ -9,6 +9,8 @@ import androidx.room.TypeConverters
 @Database(entities = [DailyUsage::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
+    abstract fun DailyUsageDao(): DailyUsageDao
+
     companion object {
         val DATABASE_NAME = "app_database"
 

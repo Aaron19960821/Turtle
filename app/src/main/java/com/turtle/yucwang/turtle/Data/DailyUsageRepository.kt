@@ -7,8 +7,6 @@ import java.util.*
 class DailyUsageRepository private constructor(private val dailyUsageDao: DailyUsageDao) {
     fun getDailyUsages() = dailyUsageDao.getAllDailyUsage()
 
-    fun getDailyUsage(id: String) = dailyUsageDao.getDailyUsageById(id)
-
     fun getDailyUsage(date: Date) = dailyUsageDao.getDailyUsageByDate(date)
 
     fun insertDailyUsage(dailyUsage: DailyUsage) = dailyUsageDao.insert(dailyUsage)
