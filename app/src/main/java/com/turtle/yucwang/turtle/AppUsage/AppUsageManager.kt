@@ -30,8 +30,8 @@ class AppUsageManager(val context: Context) {
 
             val calendar = Calendar.getInstance()
             var startOfTodayInMills: Long = currentTimeInMills
-            startOfTodayInMills -= TimeUnit.HOURS.toMillis(calendar.get(Calendar.HOUR_OF_DAY) as Long)
-            startOfTodayInMills -= TimeUnit.MINUTES.toMillis(calendar.get(Calendar.MINUTE) as Long)
+            startOfTodayInMills -= TimeUnit.HOURS.toMillis(calendar.get(Calendar.HOUR_OF_DAY).toLong())
+            startOfTodayInMills -= TimeUnit.MINUTES.toMillis(calendar.get(Calendar.MINUTE).toLong())
 
             val aggregatedUsageStates = mUsageStateManager.queryAndAggregateUsageStats(startOfTodayInMills, currentTimeInMills)
             UpdateAppUsageTaskWithDbIO(aggregatedUsageStates).execute(context)

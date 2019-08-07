@@ -9,8 +9,8 @@ import java.util.*
 
 @Dao
 interface DailyUsageDao {
-    @Query("SELECT * FROM daily_usage ORDER BY date")
-    fun getAllDailyUsage(): LiveData<LiveData<DailyUsage>>
+    @Query("SELECT * FROM daily_usage ORDER BY date DESC")
+    fun getAllDailyUsage(): LiveData<List<DailyUsage>>
 
     @Query("SELECT * FROM daily_usage WHERE date = :date")
     fun getDailyUsageByDate(date: Date): LiveData<DailyUsage>
