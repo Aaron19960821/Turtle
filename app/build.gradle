@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -25,11 +27,25 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin_version"
-    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
+    // Appcompat
+    implementation deps.appcompat.appcompat
+
+    // Navigation
+    implementation deps.navigation.fragment
+    implementation deps.navigation.ui
+
+    // Rooms dependency
     implementation deps.room.runtime
     kapt deps.room.compiler
+
+    // Lifecycle dependency
+    implementation deps.lifecycle.extensions
+    implementation deps.lifecycle.viewmodel
+
+    //Recyclerview
+    implementation deps.recyclerview.recyclerview
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

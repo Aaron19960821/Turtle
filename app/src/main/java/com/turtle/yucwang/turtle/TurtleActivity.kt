@@ -32,6 +32,8 @@ class TurtleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dailyusage_list)
 
+        supportActionBar!!.hide()
+
         timeDisplay = findViewById(R.id.today_daily_usage)
 
         viewManager = LinearLayoutManager(this@TurtleActivity)

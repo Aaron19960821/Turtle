@@ -3,13 +3,37 @@
 ext.deps = [:]
 def versions = [:]
 
+versions.appcompat = "1.1.0-alpha05"
 versions.kotlin_version = "1.2.61"
+versions.lifecycle = "2.2.0-alpha01"
+versions.navigation = "2.0.0"
+versions.recyclerview = "1.1.0-alpha06"
 versions.room = "2.1.0"
 ext.versions = versions
+
+def appcompat = [:]
+appcompat.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
+deps.appcompat = appcompat
+
+def navigation = [:]
+navigation.fragment = "androidx.navigation:navigation-fragment:$versions.navigation"
+navigation.ui = "androidx.navigation:navigation-ui:$versions.navigation"
+deps.navigation = navigation
 
 def room = [:]
 room.runtime = "androidx.room:room-runtime:$versions.room"
 room.compiler = "androidx.room:room-compiler:$versions.room"
-room.compiler = "androidx.room:room-rxjava2:$versions.room"
-room.compiler = "androidx.room:room-testing:$versions.room"
+room.rxjava2 = "androidx.room:room-rxjava2:$versions.room"
+room.testing = "androidx.room:room-testing:$versions.room"
 deps.room = room
+
+def lifecycle = [:]
+lifecycle.viewmodel = "androidx.lifecycle:lifecycle-viewmodel:$versions.lifecycle"
+lifecycle.extensions = "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+deps.lifecycle = lifecycle
+
+def recyclerview = [:]
+recyclerview.recyclerview = "androidx.recyclerview:recyclerview:$versions.recyclerview"
+deps.recyclerview = recyclerview
+
+
