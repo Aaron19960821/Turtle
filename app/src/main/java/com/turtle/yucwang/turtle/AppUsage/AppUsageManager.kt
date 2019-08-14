@@ -66,7 +66,7 @@ class AppUsageManager(val context: Context) {
 
             for ((packageName, appUsage) in aggregatedUsageState) {
                 totalUsageInMills += appUsage.totalTimeInForeground
-                val currentJsonObject: JSONObject = JSONObject()
+                val currentJsonObject = JSONObject()
                 currentJsonObject.put("package_name", packageName)
                 currentJsonObject.put("package_usage", appUsage.totalTimeInForeground)
                 jsonArray.put(currentJsonObject)

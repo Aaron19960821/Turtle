@@ -16,8 +16,8 @@ appcompat.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
 deps.appcompat = appcompat
 
 def navigation = [:]
-navigation.fragment = "androidx.navigation:navigation-fragment:$versions.navigation"
-navigation.ui = "androidx.navigation:navigation-ui:$versions.navigation"
+navigation.fragment = "androidx.navigation:navigation-fragment-ktx:$versions.navigation"
+navigation.ui = "androidx.navigation:navigation-ui-ktx:$versions.navigation"
 deps.navigation = navigation
 
 def room = [:]
