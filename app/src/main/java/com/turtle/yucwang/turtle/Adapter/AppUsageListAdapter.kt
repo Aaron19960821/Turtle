@@ -8,11 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.turtle.yucwang.turtle.Data.AppUsage
-import com.turtle.yucwang.turtle.Data.Converters
 import com.turtle.yucwang.turtle.R
 import com.turtle.yucwang.turtle.Utils.StringUtils
-import kotlinx.android.synthetic.main.appusage_list_item.view.*
-import org.w3c.dom.Text
 
 class AppUsageListAdapter(val context: Context?):
         RecyclerView.Adapter<AppUsageListAdapter.AppUsageListViewHolder>() {
