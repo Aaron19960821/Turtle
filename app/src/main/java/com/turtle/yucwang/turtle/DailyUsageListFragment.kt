@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +19,8 @@ import com.turtle.yucwang.turtle.AppUsage.AppUsageUtils
 import com.turtle.yucwang.turtle.Data.DailyUsage
 import com.turtle.yucwang.turtle.Utils.StringUtils
 import com.turtle.yucwang.turtle.ViewModel.DailyUsageViewModel
+
+import com.turtle.yucwang.turtle.R;
 
 class DailyUsageListFragment : Fragment() {
     private lateinit var viewModel: DailyUsageViewModel
@@ -80,5 +84,9 @@ class DailyUsageListFragment : Fragment() {
     }
 
     private fun onDailyUsageItemSelected(dailyUsage: DailyUsage) {
+        val bundle = bundleOf(
+                Pair("app_usages_json_string", dailyUsage.description)
+        )
+        findNavController().navigate(R.id.from_dailyusagelist_to_appusagelist, bundle)
     }
 }
