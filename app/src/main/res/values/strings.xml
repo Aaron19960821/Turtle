@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Turtle</string>
+
+    <string name="hour">H</string>
+    <string name="minute">M</string>
 </resources>

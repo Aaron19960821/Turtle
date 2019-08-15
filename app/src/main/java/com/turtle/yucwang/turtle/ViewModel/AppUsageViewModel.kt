@@ -35,11 +35,25 @@ class AppUsageViewModel : ViewModel() {
             if (params[0] != null) {
                 val appUsagesJsonArray = JSONArray(params[0])
                 for (i in 0 until appUsagesJsonArray.length()) {
-                    val currentAppName = appUsagesJsonArray.getJSONObject(i).getString("package_name")
+                    val currentAppPackageName = appUsagesJsonArray.getJSONObject(i).getString("package_name")
                     val currentAppUsage = appUsagesJsonArray.getJSONObject(i).getLong("package_usage")
-                    val currentAppIcon = context.applicationContext.packageManager.getApplicationIcon(currentAppName)
-                    result.add(AppUsage(currentAppName, currentAppUsage, currentAppIcon))
+                    val currentAppIcon = context.applicationContext.packageManager.getApplicationIcon(currentAppPackageName)
+                    val currentAppInfo = context.applicationContext.packageManager.getApplicationInfo(currentAppPackageName, 0)
+                    var currentAppName: String
+                    if (currentAppInfo != null) {
+                        currentAppName = context.applicationContext.packageManager.getApplicationLabel(currentAppInfo).toString()
+                        if (currentAppName.contains('.')) {
+                            currentAppName = currentAppPackageName.split('.').last()
+                        }
+                        result.add(AppUsage(currentAppName, currentAppUsage, currentAppIcon))
+                    } else {
+                        currentAppName = currentAppPackageName.split('.').last()
+                        result.add(AppUsage(currentAppName, currentAppUsage, currentAppIcon))
+                    }
                 }
+
+                result.sortBy { it.appUsage }
+                result.reverse()
             }
 
             return result

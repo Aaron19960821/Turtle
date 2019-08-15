@@ -32,7 +32,7 @@ class AppUsageListAdapter(val context: Context?):
                     else appUsage!!.icon!!)
                 }
                 appUsageView.apply {
-                    text = StringUtils.convertMillsecondsToString(appUsage!!.appUsage)
+                    text = StringUtils.convertMillsecondsToString(context, appUsage!!.appUsage)
                 }
             }
         }

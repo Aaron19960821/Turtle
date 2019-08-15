@@ -37,11 +37,10 @@ class DailyUsageListFragment : Fragment() {
 
     override fun onCreate(saveInstanceState: Bundle?) {
         super.onCreate(saveInstanceState)
+    }
 
-        if (activity != null &&
-                (activity!! as AppCompatActivity).supportActionBar != null) {
-            (activity!! as AppCompatActivity).supportActionBar!!.hide()
-        }
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -76,7 +75,7 @@ class DailyUsageListFragment : Fragment() {
         })
         viewModel.getTodayDailyUsage().observe(this, Observer {
             timeDisplay.apply {
-                text = StringUtils.convertMillsecondsToString(it.usage)
+                text = StringUtils.convertMillsecondsToString(context, it.usage)
                 setTextColor(if (AppUsageUtils.isAppUsageAlert(it.usage)) context.getColor(R.color.colorAlert)
                 else context.getColor(R.color.colorGood))
             }
@@ -85,7 +84,8 @@ class DailyUsageListFragment : Fragment() {
 
     private fun onDailyUsageItemSelected(dailyUsage: DailyUsage) {
         val bundle = bundleOf(
-                Pair("app_usages_json_string", dailyUsage.description)
+                Pair("app_usages_json_string", dailyUsage.description),
+                Pair("date", dailyUsage.date)
         )
         findNavController().navigate(R.id.from_dailyusagelist_to_appusagelist, bundle)
     }

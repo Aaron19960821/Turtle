@@ -5,6 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/actionBarStyle"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/appusage_list"
         android:layout_width="match_parent"

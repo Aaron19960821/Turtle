@@ -16,6 +16,10 @@
               android:name="app_usages_json_string"
               app:argType="string"
               android:defaultValue="@null" />
+          <argument
+              android:name="date"
+              app:argType="string"
+              android:defaultValue="@null" />
       </action>
   </fragment>
 

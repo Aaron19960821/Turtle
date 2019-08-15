@@ -1,23 +1,10 @@
 package com.turtle.yucwang.turtle
 
-import android.content.Context
 import android.os.Bundle
-import android.widget.TextView
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.turtle.yucwang.turtle.Adapter.DailyUsageListApapter
+import androidx.navigation.findNavController
 import com.turtle.yucwang.turtle.AppUsage.AppUsageManager
-import com.turtle.yucwang.turtle.AppUsage.AppUsageUtils
-import com.turtle.yucwang.turtle.Data.AppDatabase
-import com.turtle.yucwang.turtle.Data.DailyUsageRepository
-import com.turtle.yucwang.turtle.Utils.StringUtils
-import com.turtle.yucwang.turtle.ViewModel.DailyUsageViewModel
 
 class TurtleActivity : AppCompatActivity() {
 
@@ -29,5 +16,13 @@ class TurtleActivity : AppCompatActivity() {
 
         mAppUsageManager = AppUsageManager(this)
         mAppUsageManager.updateAppUsage()
+
+        window.decorView.rootView.apply {
+            systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
+    }
+
+    override fun onBackPressed() {
+        findNavController(R.id.navigation_host_fragment).navigateUp()
     }
 }

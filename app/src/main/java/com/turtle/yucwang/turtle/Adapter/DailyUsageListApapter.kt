@@ -34,7 +34,7 @@ class DailyUsageListApapter(val context: Context?,
                     else context.getColor(R.color.colorGood))
                 }
                 usageTextView.apply {
-                    text = StringUtils.convertMillsecondsToString(dailyUsage.usage)
+                    text = StringUtils.convertMillsecondsToString(context, dailyUsage.usage)
                     setTextColor(if (AppUsageUtils.isAppUsageAlert(dailyUsage.usage))
                         context.getColor(R.color.colorAlert)
                     else context.getColor(R.color.colorGood))
