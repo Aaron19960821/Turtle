@@ -1,6 +1,7 @@
 package com.turtle.yucwang.turtle.ViewModel
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -37,18 +38,20 @@ class AppUsageViewModel : ViewModel() {
                 for (i in 0 until appUsagesJsonArray.length()) {
                     val currentAppPackageName = appUsagesJsonArray.getJSONObject(i).getString("package_name")
                     val currentAppUsage = appUsagesJsonArray.getJSONObject(i).getLong("package_usage")
-                    val currentAppIcon = context.applicationContext.packageManager.getApplicationIcon(currentAppPackageName)
-                    val currentAppInfo = context.applicationContext.packageManager.getApplicationInfo(currentAppPackageName, 0)
-                    var currentAppName: String
-                    if (currentAppInfo != null) {
-                        currentAppName = context.applicationContext.packageManager.getApplicationLabel(currentAppInfo).toString()
-                        if (currentAppName.contains('.')) {
-                            currentAppName = currentAppPackageName.split('.').last()
+                    try {
+                        val currentAppInfo = context.applicationContext.packageManager.getApplicationInfo(currentAppPackageName, 0)
+                        var currentAppName: String
+                        if (currentAppInfo != null) {
+                            val currentAppIcon = context.applicationContext.packageManager.getApplicationIcon(currentAppPackageName)
+                            currentAppName = context.applicationContext.packageManager.getApplicationLabel(currentAppInfo).toString()
+                            if (currentAppName.contains('.')) {
+                                currentAppName = currentAppPackageName.split('.').last()
+                            }
+                            result.add(AppUsage(currentAppName, currentAppUsage, currentAppIcon))
                         }
-                        result.add(AppUsage(currentAppName, currentAppUsage, currentAppIcon))
-                    } else {
-                        currentAppName = currentAppPackageName.split('.').last()
-                        result.add(AppUsage(currentAppName, currentAppUsage, currentAppIcon))
+                    } catch (exception: PackageManager.NameNotFoundException) {
+                        val currentAppName = currentAppPackageName.split('.').last()
+                        result.add(AppUsage(currentAppName, currentAppUsage, null))
                     }
                 }
 

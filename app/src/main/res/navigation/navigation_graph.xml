@@ -11,7 +11,11 @@
         android:name="com.turtle.yucwang.turtle.DailyUsageListFragment">
       <action
           android:id="@+id/from_dailyusagelist_to_appusagelist"
-          app:destination="@id/app_usage_list_fragment">
+          app:destination="@id/app_usage_list_fragment"
+          app:enterAnim="@anim/nav_default_enter_anim"
+          app:exitAnim="@anim/nav_default_exit_anim"
+          app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+          app:popExitAnim="@anim/nav_default_pop_exit_anim">
           <argument
               android:name="app_usages_json_string"
               app:argType="string"

@@ -61,5 +61,8 @@ class DailyUsageListApapter(val context: Context?,
         notifyDataSetChanged()
     }
 
-    private fun getDataAt(position: Int) = dailyUsages!!.get(position)
+    private fun getDataAt(position: Int): DailyUsage? {
+        if (dailyUsages == null && position >= dailyUsages!!.size) return null
+        return dailyUsages!![position]
+    }
 }

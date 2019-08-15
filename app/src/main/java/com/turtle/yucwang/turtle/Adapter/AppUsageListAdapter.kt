@@ -25,7 +25,7 @@ class AppUsageListAdapter(val context: Context?):
                 }
                 appIconView.apply {
                     setImageDrawable(if (appUsage.icon == null)
-                        context.getDrawable(R.drawable.ic_launcher_foreground)
+                        context.getDrawable(R.mipmap.ic_launcher_round)
                     else appUsage!!.icon!!)
                 }
                 appUsageView.apply {
