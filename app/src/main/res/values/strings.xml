@@ -3,4 +3,9 @@
 
     <string name="hour">H</string>
     <string name="minute">M</string>
+
+    <string name="foreground_service_stopped_toast">Turtle have stopped.</string>
+
+    <string name="notification_explanation">Your current day phone usage: </string>
+    <string name="notification_app_usage_not_available">Your current day phone usage is not available now</string>
 </resources>

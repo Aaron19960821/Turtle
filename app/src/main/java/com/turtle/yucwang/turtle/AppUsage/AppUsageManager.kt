@@ -22,7 +22,11 @@ import java.util.concurrent.TimeUnit
 class AppUsageManager(val context: Context) {
     private val mUsageStateManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
-    fun updateAppUsage() {
+    interface OnAppUsageUpdatedListener {
+        fun onAppUsageUpdated(currentDayData: DailyUsage)
+    }
+
+    fun updateAppUsage(listener: OnAppUsageUpdatedListener?) {
         if (!this.checkPermission()) {
             showAcquirePermissionDialog()
         } else {
@@ -34,7 +38,13 @@ class AppUsageManager(val context: Context) {
             startOfTodayInMills -= TimeUnit.MINUTES.toMillis(calendar.get(Calendar.MINUTE).toLong())
 
             val aggregatedUsageStates = mUsageStateManager.queryAndAggregateUsageStats(startOfTodayInMills, currentTimeInMills)
-            UpdateAppUsageTaskWithDbIO(aggregatedUsageStates).execute(context)
+            UpdateAppUsageTaskWithDbIO(aggregatedUsageStates, listener).execute(context)
+        }
+    }
+
+    fun askForPermissionIfNeeded() {
+        if (!this.checkPermission()) {
+            showAcquirePermissionDialog()
         }
     }
 
@@ -56,9 +66,10 @@ class AppUsageManager(val context: Context) {
     }
 
     private class UpdateAppUsageTaskWithDbIO(
-            val aggregatedUsageState: Map<String, UsageStats>):
-            AsyncTask<Context, Void?, Void?>() {
-        override fun doInBackground(vararg parms: Context): Void? {
+            val aggregatedUsageState: Map<String, UsageStats>,
+            val listener: OnAppUsageUpdatedListener?):
+            AsyncTask<Context, Void?, DailyUsage>() {
+        override fun doInBackground(vararg parms: Context): DailyUsage {
             var totalUsageInMills: Long = 0
             val date = Converters().dateToString(Calendar.getInstance().time)
             val pickUpTime = 0
@@ -73,14 +84,18 @@ class AppUsageManager(val context: Context) {
             }
 
             val description = jsonArray.toString()
+            val currentDailyUsage = DailyUsage(date, pickUpTime, totalUsageInMills, description)
             val dailyUsageRepository =
                     DailyUsageRepository.getInstance(AppDatabase.getInstance(parms.get(0)).DailyUsageDao())
-            dailyUsageRepository.insertDailyUsage(DailyUsage(date, pickUpTime, totalUsageInMills, description))
+            dailyUsageRepository.insertDailyUsage(currentDailyUsage)
 
-            return null
+            return currentDailyUsage
         }
 
-        override fun onPostExecute(result: Void?) {
+        override fun onPostExecute(result: DailyUsage) {
+            if (listener != null) {
+                listener.onAppUsageUpdated(result)
+            }
         }
     }
 }
