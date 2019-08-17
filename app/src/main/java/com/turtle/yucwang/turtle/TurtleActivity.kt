@@ -18,6 +18,7 @@ class TurtleActivity : AppCompatActivity() {
             systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
 
+        AppUsageManager.getInstance(this).askForPermissionIfNeeded()
         startTurtleService()
     }
 

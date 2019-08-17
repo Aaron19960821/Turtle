@@ -19,7 +19,7 @@ import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class AppUsageManager(val context: Context) {
+class AppUsageManager private constructor(val context: Context) {
     private val mUsageStateManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
     interface OnAppUsageUpdatedListener {
@@ -28,7 +28,7 @@ class AppUsageManager(val context: Context) {
 
     fun updateAppUsage(listener: OnAppUsageUpdatedListener?) {
         if (!this.checkPermission()) {
-            showAcquirePermissionDialog()
+            return
         } else {
             val currentTimeInMills = System.currentTimeMillis()
 
@@ -95,6 +95,21 @@ class AppUsageManager(val context: Context) {
         override fun onPostExecute(result: DailyUsage) {
             if (listener != null) {
                 listener.onAppUsageUpdated(result)
+            }
+        }
+    }
+
+    companion object {
+        @Volatile private var instance: AppUsageManager? = null
+
+        fun getInstance(context: Context): AppUsageManager {
+            if (instance == null) {
+                synchronized(this) {
+                    instance = AppUsageManager(context.applicationContext)
+                    return instance!!
+                }
+            } else {
+                return instance!!
             }
         }
     }

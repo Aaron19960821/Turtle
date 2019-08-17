@@ -40,7 +40,7 @@ class TurtleForegroundService: Service() {
         if (intent != null) {
             val action = intent.action
             if (action.equals(ACTION_START_SERVICE)) {
-                mAppUsageManager = AppUsageManager(this)
+                mAppUsageManager = AppUsageManager.getInstance(this)
                 startForegroundService()
                 updateAppUsage()
                 scheduleAlarmTask()
