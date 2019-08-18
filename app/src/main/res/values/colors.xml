@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#F7F7F7</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
 
-    <color name="colorPass">#83F442</color>
-    <color name="colorAlert">#F92020</color>
-    <color name="textWhite">#FEFEFE</color>
+    <color name="colorAlert">#CC0000</color>
+    <color name="colorGood">#33CC33</color>
+
+    <color name="colorDivider">#d9d9d9</color>
+
+    <color name="colorStatusBar">@color/colorPrimary</color>
+    <color name="colorTextPrimary">#1D1D1D</color>
+
+    <color name="darkGreen">#008000</color>
+    <color name="gray">#A9A9A9</color>
 </resources>
