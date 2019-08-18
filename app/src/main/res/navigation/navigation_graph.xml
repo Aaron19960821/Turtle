@@ -4,7 +4,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/daily_usage_list_fragment">
+    app:startDestination="@id/check_permission_fragment">
+
+    <fragment
+        android:id="@+id/check_permission_fragment"
+        android:name="com.turtle.yucwang.turtle.TurtleCheckPermissionFragment">
+        <action
+            android:id="@+id/from_check_permission_to_dailyusage"
+            app:destination="@id/daily_usage_list_fragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim">
+        </action>
+    </fragment>
 
   <fragment
         android:id="@+id/daily_usage_list_fragment"

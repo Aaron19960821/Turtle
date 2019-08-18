@@ -8,4 +8,15 @@
 
     <string name="notification_explanation">Your current day phone usage: </string>
     <string name="notification_app_usage_not_available">Your current day phone usage is not available now</string>
+
+    <string name="bottom_navigation_daily_usage">Daily Usage</string>
+    <string name="preferences">Preferences</string>
+
+    <string name="ask_for_permission_dialog_title">Ask for permission</string>
+    <string name="ask_for_permission_dialog_body">We need usage state permission to track your mobile phone usage state for you.</string>
+
+    <string name="yes">Yes</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="activate_turtle">Activate Turtle</string>
 </resources>

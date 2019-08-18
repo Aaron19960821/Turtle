@@ -11,4 +11,7 @@
 
     <color name="colorStatusBar">@color/colorPrimary</color>
     <color name="colorTextPrimary">#1D1D1D</color>
+
+    <color name="darkGreen">#008000</color>
+    <color name="gray">#A9A9A9</color>
 </resources>

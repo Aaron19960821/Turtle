@@ -3,6 +3,7 @@ package com.turtle.yucwang.turtle.ViewModel
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.turtle.yucwang.turtle.AppUsage.AppUsageManager
 import com.turtle.yucwang.turtle.Data.AppDatabase
 import com.turtle.yucwang.turtle.Data.DailyUsage
 import com.turtle.yucwang.turtle.Data.DailyUsageRepository

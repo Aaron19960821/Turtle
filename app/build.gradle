@@ -18,8 +18,13 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
         }
     }
 }
@@ -43,6 +48,9 @@ dependencies {
     // Lifecycle dependency
     implementation deps.lifecycle.extensions
     implementation deps.lifecycle.viewmodel
+
+    // Preference
+    implementation deps.preference.preference
 
     //Recyclerview
     implementation deps.recyclerview.recyclerview

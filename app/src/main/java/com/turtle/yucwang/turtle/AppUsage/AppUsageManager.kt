@@ -14,6 +14,7 @@ import com.turtle.yucwang.turtle.Data.AppDatabase
 import com.turtle.yucwang.turtle.Data.Converters
 import com.turtle.yucwang.turtle.Data.DailyUsage
 import com.turtle.yucwang.turtle.Data.DailyUsageRepository
+import com.turtle.yucwang.turtle.R
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
@@ -42,27 +43,11 @@ class AppUsageManager private constructor(val context: Context) {
         }
     }
 
-    fun askForPermissionIfNeeded() {
-        if (!this.checkPermission()) {
-            showAcquirePermissionDialog()
-        }
-    }
-
-    private fun checkPermission(): Boolean {
+    fun checkPermission(): Boolean {
         val appOps: AppOpsManager = context.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
         val mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), context.packageName)
 
         return mode == AppOpsManager.MODE_ALLOWED
-    }
-
-    private fun showAcquirePermissionDialog() {
-        val askPermissionDialogBuilder = AlertDialog.Builder(context)
-                .setTitle("Ask for permission")
-                .setMessage("We need usage state to track your mobile phone usage state for you")
-                .setPositiveButton("Yes", {dialog, which -> context.startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))})
-                .setNegativeButton("No", {dialog, which ->  Toast.makeText(context, "not allowed!!", Toast.LENGTH_LONG)})
-
-        askPermissionDialogBuilder.create().show()
     }
 
     private class UpdateAppUsageTaskWithDbIO(
