@@ -38,10 +38,23 @@
               app:argType="string"
               android:defaultValue="@null" />
       </action>
+
+      <action
+          android:id="@+id/from_dailyusagelist_to_preference"
+          app:destination="@id/preference_fragment"
+          app:enterAnim="@anim/nav_default_enter_anim"
+          app:exitAnim="@anim/nav_default_exit_anim"
+          app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+          app:popExitAnim="@anim/nav_default_pop_exit_anim">
+      </action>
   </fragment>
 
   <fragment
       android:id="@+id/app_usage_list_fragment"
       android:name="com.turtle.yucwang.turtle.AppUsageListFragment" />
+
+    <fragment
+        android:id="@+id/preference_fragment"
+        android:name="com.turtle.yucwang.turtle.TurtlePreferenceFragment" />
 
 </navigation>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/basic">
+        <Preference
+            android:key="pref_phone_usage"
+            android:title="@string/pref_phone_usage_goal"
+            android:summary="@string/pref_phone_usage_goal_summary"/>
+
+        <Preference
+            android:key="pref_app_usage"
+            android:title="@string/pref_app_usage_goal"
+            android:summary="@string/pref_app_usage_goal_summary"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -80,6 +81,11 @@ class DailyUsageListFragment : Fragment() {
                 else context.getColor(R.color.colorGood))
             }
         })
+
+        val preferenceButton = view.findViewById<ImageButton>(R.id.turtle_preference)
+        preferenceButton.setOnClickListener {
+            findNavController().navigate(R.id.from_dailyusagelist_to_preference)
+        }
     }
 
     private fun onDailyUsageItemSelected(dailyUsage: DailyUsage) {
