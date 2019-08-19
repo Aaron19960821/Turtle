@@ -1,7 +1,7 @@
 package com.turtle.yucwang.turtle
 
 import com.turtle.yucwang.turtle.Data.Converters
-import org.junit.Assert.assertEquals;
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.*
 

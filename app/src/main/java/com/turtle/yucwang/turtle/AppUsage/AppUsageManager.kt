@@ -15,6 +15,7 @@ import com.turtle.yucwang.turtle.Data.Converters
 import com.turtle.yucwang.turtle.Data.DailyUsage
 import com.turtle.yucwang.turtle.Data.DailyUsageRepository
 import com.turtle.yucwang.turtle.R
+import com.turtle.yucwang.turtle.Utils.DateUtils
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
@@ -32,12 +33,7 @@ class AppUsageManager private constructor(val context: Context) {
             return
         } else {
             val currentTimeInMills = System.currentTimeMillis()
-
-            val calendar = Calendar.getInstance()
-            var startOfTodayInMills: Long = currentTimeInMills
-            startOfTodayInMills -= TimeUnit.HOURS.toMillis(calendar.get(Calendar.HOUR_OF_DAY).toLong())
-            startOfTodayInMills -= TimeUnit.MINUTES.toMillis(calendar.get(Calendar.MINUTE).toLong())
-
+            var startOfTodayInMills: Long = DateUtils.getStartOfDayFromTimeStamp(currentTimeInMills)
             val aggregatedUsageStates = mUsageStateManager.queryAndAggregateUsageStats(startOfTodayInMills, currentTimeInMills)
             UpdateAppUsageTaskWithDbIO(aggregatedUsageStates, listener).execute(context)
         }

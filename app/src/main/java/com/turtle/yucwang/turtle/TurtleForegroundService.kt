@@ -11,7 +11,9 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.turtle.yucwang.turtle.AppUsage.AppUsageManager
 import com.turtle.yucwang.turtle.Data.DailyUsage
+import com.turtle.yucwang.turtle.Utils.DateUtils
 import com.turtle.yucwang.turtle.Utils.StringUtils
+import java.util.concurrent.TimeUnit
 
 class TurtleForegroundService: Service() {
 
@@ -62,11 +64,10 @@ class TurtleForegroundService: Service() {
 
     private fun scheduleAlarmTask() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val currentTimeStamp = System.currentTimeMillis()
-        val startTime = currentTimeStamp - (currentTimeStamp % (60 * 60 * 1000))
+        val startTime = DateUtils.getLastMinuteOfCurrentHour()
         val intent = Intent(this, TurtleBroadcastReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-        alarmManager.setRepeating(AlarmManager.RTC, startTime, 60 * 60 * 1000, pendingIntent)
+        alarmManager.setRepeating(AlarmManager.RTC, startTime, TimeUnit.HOURS.toMillis(1), pendingIntent)
     }
 
     private fun updateAppUsage() {
