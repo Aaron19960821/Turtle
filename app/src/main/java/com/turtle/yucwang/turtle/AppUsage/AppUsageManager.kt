@@ -1,25 +1,19 @@
 package com.turtle.yucwang.turtle.AppUsage
 
-import android.app.AlertDialog
 import android.app.AppOpsManager
 import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
-import android.content.Intent
 import android.os.AsyncTask
 import android.os.Process
-import android.provider.Settings
-import android.widget.Toast
 import com.turtle.yucwang.turtle.Data.AppDatabase
 import com.turtle.yucwang.turtle.Data.Converters
 import com.turtle.yucwang.turtle.Data.DailyUsage
 import com.turtle.yucwang.turtle.Data.DailyUsageRepository
-import com.turtle.yucwang.turtle.R
 import com.turtle.yucwang.turtle.Utils.DateUtils
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class AppUsageManager private constructor(val context: Context) {
     private val mUsageStateManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager

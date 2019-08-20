@@ -21,8 +21,6 @@ import com.turtle.yucwang.turtle.Data.DailyUsage
 import com.turtle.yucwang.turtle.Utils.StringUtils
 import com.turtle.yucwang.turtle.ViewModel.DailyUsageViewModel
 
-import com.turtle.yucwang.turtle.R;
-
 class DailyUsageListFragment : Fragment() {
     private lateinit var viewModel: DailyUsageViewModel
 

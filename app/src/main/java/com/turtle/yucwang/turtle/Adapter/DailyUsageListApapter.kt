@@ -5,14 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.turtle.yucwang.turtle.AppUsage.AppUsageUtils
 import com.turtle.yucwang.turtle.DailyUsageListFragment
 import com.turtle.yucwang.turtle.Data.DailyUsage
 import com.turtle.yucwang.turtle.R
 import com.turtle.yucwang.turtle.Utils.StringUtils
-import com.turtle.yucwang.turtle.ViewModel.DailyUsageViewModel
 
 class DailyUsageListApapter(val context: Context?,
                             val listener: DailyUsageListFragment.OnDailyUsageItemClickedListener) :
