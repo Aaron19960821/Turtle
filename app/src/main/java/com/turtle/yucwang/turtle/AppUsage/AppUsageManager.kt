@@ -6,6 +6,7 @@ import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Process
+import android.util.ArrayMap
 import com.turtle.yucwang.turtle.Data.AppDatabase
 import com.turtle.yucwang.turtle.Data.Converters
 import com.turtle.yucwang.turtle.Data.DailyUsage
@@ -14,6 +15,7 @@ import com.turtle.yucwang.turtle.Utils.DateUtils
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class AppUsageManager private constructor(val context: Context) {
     private val mUsageStateManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
@@ -28,7 +30,8 @@ class AppUsageManager private constructor(val context: Context) {
         } else {
             val currentTimeInMills = System.currentTimeMillis()
             var startOfTodayInMills: Long = DateUtils.getStartOfDayFromTimeStamp(currentTimeInMills)
-            val aggregatedUsageStates = mUsageStateManager.queryAndAggregateUsageStats(startOfTodayInMills, currentTimeInMills)
+            val usageStates = mUsageStateManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST, startOfTodayInMills, currentTimeInMills)
+            val aggregatedUsageStates = aggregatedQueryResults(startOfTodayInMills, usageStates)
             UpdateAppUsageTaskWithDbIO(aggregatedUsageStates, listener).execute(context)
         }
     }
@@ -38,6 +41,28 @@ class AppUsageManager private constructor(val context: Context) {
         val mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, Process.myUid(), context.packageName)
 
         return mode == AppOpsManager.MODE_ALLOWED
+    }
+
+    private fun aggregatedQueryResults(startTimestamp: Long, usageStats: List<UsageStats>): Map<String, UsageStats> {
+        if (usageStats.isEmpty()) {
+            return Collections.emptyMap()
+        }
+
+        val aggregatedResults = ArrayMap<String, UsageStats>()
+        val stateCount = usageStats.size
+        for (i in 0..(stateCount - 1)) {
+            val newState = usageStats.get(i)
+            if (startTimestamp - newState.firstTimeStamp <= TimeUnit.MINUTES.toMillis(VALID_USAGE_THRESHHOLD_IN_MINS)) {
+                val existedUsgaeState = aggregatedResults.get(newState.packageName)
+                if (existedUsgaeState != null) {
+                    existedUsgaeState.add(newState)
+                } else {
+                    aggregatedResults.put(newState.packageName, newState)
+                }
+            }
+        }
+
+        return aggregatedResults
     }
 
     private class UpdateAppUsageTaskWithDbIO(
@@ -75,6 +100,9 @@ class AppUsageManager private constructor(val context: Context) {
     }
 
     companion object {
+        // We do not aggregate the results that was collected long ago
+        const val VALID_USAGE_THRESHHOLD_IN_MINS = 20L
+
         @Volatile private var instance: AppUsageManager? = null
 
         fun getInstance(context: Context): AppUsageManager {
