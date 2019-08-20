@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -19,8 +20,6 @@ import com.turtle.yucwang.turtle.AppUsage.AppUsageUtils
 import com.turtle.yucwang.turtle.Data.DailyUsage
 import com.turtle.yucwang.turtle.Utils.StringUtils
 import com.turtle.yucwang.turtle.ViewModel.DailyUsageViewModel
-
-import com.turtle.yucwang.turtle.R;
 
 class DailyUsageListFragment : Fragment() {
     private lateinit var viewModel: DailyUsageViewModel
@@ -76,10 +75,15 @@ class DailyUsageListFragment : Fragment() {
         viewModel.getTodayDailyUsage().observe(this, Observer {
             timeDisplay.apply {
                 text = StringUtils.convertMillsecondsToString(context, it.usage)
-                setTextColor(if (AppUsageUtils.isAppUsageAlert(it.usage)) context.getColor(R.color.colorAlert)
+                setTextColor(if (AppUsageUtils.isPhoneUsageAlert(context, it.usage)) context.getColor(R.color.colorAlert)
                 else context.getColor(R.color.colorGood))
             }
         })
+
+        val preferenceButton = view.findViewById<ImageButton>(R.id.turtle_preference)
+        preferenceButton.setOnClickListener {
+            findNavController().navigate(R.id.from_dailyusagelist_to_preference)
+        }
     }
 
     private fun onDailyUsageItemSelected(dailyUsage: DailyUsage) {

@@ -1,17 +1,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="@style/Theme.AppCompat.DayNight.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:colorPrimary">@color/colorPrimary</item>
         <item name="android:statusBarColor">@color/colorStatusBar</item>
         <item name="actionBarStyle">@style/actionBarStyle</item>
+        <item name="preferenceTheme">@style/turtlePreferenceStyle</item>
     </style>
     <style name="actionBarStyle" parent="">
         <item name="android:titleTextStyle">@color/colorTextPrimary</item>
     </style>
     <style name="actionBarTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+    <style name="turtlePreferenceStyle">
+        <item name="android:layout">@layout/main_preference_fragment</item>
     </style>
 
 </resources>

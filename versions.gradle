@@ -10,6 +10,7 @@ versions.navigation = "2.0.0"
 versions.preference = "1.0.0"
 versions.recyclerview = "1.1.0-alpha06"
 versions.room = "2.1.0"
+versions.takisoft_preference = "1.0.0-alpha2"
 ext.versions = versions
 
 def appcompat = [:]
@@ -39,4 +40,5 @@ deps.recyclerview = recyclerview
 
 def preference = [:]
 preference.preference = "androidx.preference:preference:$versions.preference"
+preference.time_preference = "com.takisoft.preferencex:preferencex-datetimepicker:$versions.takisoft_preference"
 deps.preference = preference
