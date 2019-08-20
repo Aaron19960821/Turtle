@@ -51,6 +51,7 @@ dependencies {
 
     // Preference
     implementation deps.preference.preference
+    implementation deps.preference.time_preference
 
     //Recyclerview
     implementation deps.recyclerview.recyclerview

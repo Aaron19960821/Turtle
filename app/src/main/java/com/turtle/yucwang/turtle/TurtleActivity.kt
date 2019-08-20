@@ -37,6 +37,4 @@ class TurtleActivity : AppCompatActivity() {
             startService(intent)
         }
     }
-
-
 }
