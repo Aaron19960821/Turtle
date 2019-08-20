@@ -77,7 +77,7 @@ class DailyUsageListFragment : Fragment() {
         viewModel.getTodayDailyUsage().observe(this, Observer {
             timeDisplay.apply {
                 text = StringUtils.convertMillsecondsToString(context, it.usage)
-                setTextColor(if (AppUsageUtils.isAppUsageAlert(it.usage)) context.getColor(R.color.colorAlert)
+                setTextColor(if (AppUsageUtils.isPhoneUsageAlert(context, it.usage)) context.getColor(R.color.colorAlert)
                 else context.getColor(R.color.colorGood))
             }
         })

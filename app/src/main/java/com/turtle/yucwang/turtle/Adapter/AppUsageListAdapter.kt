@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.turtle.yucwang.turtle.AppUsage.AppUsageUtils
 import com.turtle.yucwang.turtle.Data.AppUsage
 import com.turtle.yucwang.turtle.R
 import com.turtle.yucwang.turtle.Utils.StringUtils
@@ -29,7 +30,10 @@ class AppUsageListAdapter(val context: Context?):
                     else appUsage!!.icon!!)
                 }
                 appUsageView.apply {
-                    text = StringUtils.convertMillsecondsToString(context, appUsage!!.appUsage)
+                    text = StringUtils.convertMillsecondsToString(context, appUsage.appUsage)
+                    setTextColor(if (AppUsageUtils.isAppUsageAlert(context, appUsage.appUsage))
+                        context.getColor(R.color.colorAlert)
+                    else context.getColor(R.color.colorGood))
                 }
             }
         }

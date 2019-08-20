@@ -29,13 +29,13 @@ class DailyUsageListApapter(val context: Context?,
             if (dailyUsage != null) {
                 dateTextView.apply {
                     text = dailyUsage.date
-                    setTextColor(if (AppUsageUtils.isAppUsageAlert(dailyUsage.usage))
+                    setTextColor(if (AppUsageUtils.isPhoneUsageAlert(context, dailyUsage.usage))
                         context.getColor(R.color.colorAlert)
                     else context.getColor(R.color.colorGood))
                 }
                 usageTextView.apply {
                     text = StringUtils.convertMillsecondsToString(context, dailyUsage.usage)
-                    setTextColor(if (AppUsageUtils.isAppUsageAlert(dailyUsage.usage))
+                    setTextColor(if (AppUsageUtils.isPhoneUsageAlert(context, dailyUsage.usage))
                         context.getColor(R.color.colorAlert)
                     else context.getColor(R.color.colorGood))
                 }

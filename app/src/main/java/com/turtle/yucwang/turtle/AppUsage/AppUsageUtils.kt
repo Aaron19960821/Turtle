@@ -1,12 +1,18 @@
 package com.turtle.yucwang.turtle.AppUsage
 
-import java.util.concurrent.TimeUnit
+import android.content.Context
+import com.turtle.yucwang.turtle.Preferences.PrefsService
 
 class AppUsageUtils() {
     companion object {
-        fun isAppUsageAlert(timeInMills: Long): Boolean {
-            val mins = TimeUnit.MILLISECONDS.toMinutes(timeInMills).toInt()
-            return mins > 4 * 60
+        fun isAppUsageAlert(context: Context, timeInMills: Long): Boolean {
+            val appUsageLimit = PrefsService.getInstance(context).getAppUsageLimit()
+            return timeInMills >= appUsageLimit
+        }
+
+        fun isPhoneUsageAlert(context: Context, timeInMills: Long): Boolean {
+            val phoneUsageLimit = PrefsService.getInstance(context).getPhoneUsageLimit()
+            return timeInMills >= phoneUsageLimit
         }
     }
 }
