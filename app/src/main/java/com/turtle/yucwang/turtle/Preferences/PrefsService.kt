@@ -18,7 +18,7 @@ class PrefsService private constructor(val context: Context) {
     fun getPhoneUsageLimit(): Long {
         val usage = getLong(Preferences.PHONE_USAGE.key)
         if (usage < 0) {
-            return TimeUnit.HOURS.toMillis(4)
+            return TimeUnit.HOURS.toMillis(DEFAULT_PHONE_USAGE_LIMIT_IN_MILLS)
         }
         return usage
     }
@@ -26,7 +26,7 @@ class PrefsService private constructor(val context: Context) {
     fun getAppUsageLimit(): Long {
         val usage = getLong(Preferences.APP_USAGE.key)
         if (usage < 0) {
-            return TimeUnit.HOURS.toMillis(2)
+            return TimeUnit.HOURS.toMillis(DEFAULT_APP_USAGE_LIMIT_IN_MILLS)
         }
         return usage
     }
@@ -39,6 +39,8 @@ class PrefsService private constructor(val context: Context) {
         }
 
         const val PREF_NAME = "Turtle"
+        const val DEFAULT_PHONE_USAGE_LIMIT_IN_MILLS = 4L
+        const val DEFAULT_APP_USAGE_LIMIT_IN_MILLS = 2L
 
         @Volatile private var instance: PrefsService? = null
 
